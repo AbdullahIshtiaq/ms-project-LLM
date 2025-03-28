@@ -57,12 +57,9 @@
                     <div class="card-body">
                         <form id="analysisForm">
                             <div class="mb-3">
-                                <label for="stockSymbol" class="form-label">Stock Symbol</label>
-                                <input type="text" class="form-control" id="stockSymbol" placeholder="e.g., AAPL, MSFT, GOOGL" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="newsCount" class="form-label">Number of News Articles</label>
+                                <label for="newsCount" class="form-label">Number of News Articles to Analyze</label>
                                 <input type="number" class="form-control" id="newsCount" min="1" max="10" value="5">
+                                <small class="form-text text-muted">We'll scrape financial news and automatically extract stock symbols for analysis.</small>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Analyze Sentiment</button>
                         </form>
@@ -75,36 +72,22 @@
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
-            <p class="mt-3">Analyzing financial news sentiment. This may take a minute...</p>
+            <p class="mt-3">Scraping news, extracting symbols, and analyzing sentiment. This may take a minute...</p>
         </div>
         
         <div id="results" style="display: none;">
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="card" id="stockInfo">
-                        <div class="card-header">
-                            <h4 id="stockName">Stock Information</h4>
-                        </div>
-                        <div class="card-body">
-                            <div id="stockDetails"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Sentiment Summary</h4>
-                        </div>
-                        <div class="card-body">
-                            <div id="sentimentSummary"></div>
-                            <button id="generateReport" class="btn btn-success mt-3">Generate PDF Report</button>
-                        </div>
+            <div class="mb-4">
+                <h3>Analysis Summary</h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div id="analysisSummary"></div>
                     </div>
                 </div>
             </div>
             
-            <h3 class="mb-4">News Articles Analysis</h3>
-            <div id="newsCards"></div>
+            <div id="stockResults">
+                <!-- Stock results will be inserted here dynamically -->
+            </div>
         </div>
     </div>
     
@@ -117,7 +100,6 @@
             document.getElementById('analysisForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                const stockSymbol = document.getElementById('stockSymbol').value;
                 const newsCount = document.getElementById('newsCount').value;
                 
                 // Show loading
@@ -126,7 +108,6 @@
                 
                 // Prepare form data
                 const formData = new FormData();
-                formData.append('stock_symbol', stockSymbol);
                 formData.append('news_count', newsCount);
                 
                 // Send request to backend
@@ -159,19 +140,170 @@
                 });
             });
             
-            // Generate PDF report
-            document.getElementById('generateReport').addEventListener('click', function() {
-                if (!analysisResults) {
+            function displayResults(data) {
+                // Display analysis summary
+                const summaryEl = document.getElementById('analysisSummary');
+                summaryEl.innerHTML = `
+                    <p><strong>Total Articles Scraped:</strong> ${data.total_articles}</p>
+                    <p><strong>Articles with Identified Symbols:</strong> ${data.articles_with_symbols}</p>
+                    <p><strong>Unique Stock Symbols Found:</strong> ${data.unique_symbols}</p>
+                `;
+                
+                // Clear previous results
+                const stockResultsEl = document.getElementById('stockResults');
+                stockResultsEl.innerHTML = '';
+                
+                // Loop through each stock result and display it
+                data.results.forEach((result, index) => {
+                    const stockInfo = result.stock_info;
+                    const sentimentResults = result.sentiment_results;
+                    
+                    // Create a container for this stock
+                    const stockContainer = document.createElement('div');
+                    stockContainer.className = 'mb-5';
+                    
+                    // Stock header
+                    const header = document.createElement('h3');
+                    header.textContent = `${stockInfo.company_name} (${stockInfo.symbol})`;
+                    stockContainer.appendChild(header);
+                    
+                    // Stock info and sentiment summary row
+                    const infoRow = document.createElement('div');
+                    infoRow.className = 'row mb-4';
+                    
+                    // Stock info card
+                    infoRow.innerHTML = `
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Stock Information</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Current Price:</strong> $${stockInfo.current_price.toFixed(2)}</p>
+                                    <p><strong>Previous Close:</strong> $${stockInfo.previous_close.toFixed(2)}</p>
+                                    <p><strong>Day Range:</strong> $${stockInfo.day_low.toFixed(2)} - $${stockInfo.day_high.toFixed(2)}</p>
+                                    <p><strong>52 Week Range:</strong> $${stockInfo.year_low.toFixed(2)} - $${stockInfo.year_high.toFixed(2)}</p>
+                                    <p><strong>Sector:</strong> ${stockInfo.sector}</p>
+                                    <p><strong>Industry:</strong> ${stockInfo.industry}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Sentiment Summary</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div id="sentimentSummary-${index}"></div>
+                                    <button class="btn btn-success mt-3 generate-report" data-index="${index}">Generate PDF Report</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    stockContainer.appendChild(infoRow);
+                    
+                    // News articles section
+                    const newsHeader = document.createElement('h4');
+                    newsHeader.className = 'mb-3';
+                    newsHeader.textContent = 'Related News Articles';
+                    stockContainer.appendChild(newsHeader);
+                    
+                    // Add news cards
+                    const newsCardsContainer = document.createElement('div');
+                    newsCardsContainer.id = `newsCards-${index}`;
+                    stockContainer.appendChild(newsCardsContainer);
+                    
+                    // Add the stock container to the results
+                    stockResultsEl.appendChild(stockContainer);
+                    
+                    // Calculate sentiment counts
+                    const sentimentCounts = {
+                        positive: 0,
+                        negative: 0,
+                        neutral: 0,
+                        unknown: 0
+                    };
+                    
+                    sentimentResults.forEach(result => {
+                        const sentiment = result.sentiment_analysis.sentiment.toLowerCase();
+                        if (sentimentCounts.hasOwnProperty(sentiment)) {
+                            sentimentCounts[sentiment]++;
+                        } else {
+                            sentimentCounts.unknown++;
+                        }
+                    });
+                    
+                    // Determine overall sentiment
+                    let overallSentiment = 'neutral';
+                    if (sentimentCounts.positive > Math.max(sentimentCounts.negative, sentimentCounts.neutral)) {
+                        overallSentiment = 'positive';
+                    } else if (sentimentCounts.negative > Math.max(sentimentCounts.positive, sentimentCounts.neutral)) {
+                        overallSentiment = 'negative';
+                    }
+                    
+                    // Display sentiment summary
+                    const summaryEl = document.getElementById(`sentimentSummary-${index}`);
+                    summaryEl.innerHTML = `
+                        <div class="mb-3">
+                            <span class="sentiment-badge ${overallSentiment}">Overall: ${overallSentiment.toUpperCase()}</span>
+                        </div>
+                        <p>Based on ${sentimentResults.length} news articles:</p>
+                        <ul>
+                            <li>${sentimentCounts.positive} positive</li>
+                            <li>${sentimentCounts.negative} negative</li>
+                            <li>${sentimentCounts.neutral} neutral</li>
+                        </ul>
+                    `;
+                    
+                    // Display news cards
+                    const newsCardsEl = document.getElementById(`newsCards-${index}`);
+                    sentimentResults.forEach(result => {
+                        const article = result.article;
+                        const analysis = result.sentiment_analysis;
+                        
+                        const newsCard = document.createElement('div');
+                        newsCard.className = 'card mb-3';
+                        newsCard.innerHTML = `
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">${article.title}</h5>
+                                <span class="sentiment-badge ${analysis.sentiment.toLowerCase()}">${analysis.sentiment}</span>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">${article.content.substring(0, 200)}...</p>
+                                <p class="text-muted">Source: ${article.source} | Date: ${article.date}</p>
+                                <p><strong>Impact Analysis:</strong> ${analysis.explanation}</p>
+                                <p><strong>Potential Impact:</strong> ${analysis.potential_impact}</p>
+                                <p><strong>Importance:</strong> ${analysis.importance}/10</p>
+                                <a href="${article.url}" target="_blank" class="btn btn-outline-primary">Read Full Article</a>
+                            </div>
+                        `;
+                        
+                        newsCardsEl.appendChild(newsCard);
+                    });
+                    
+                    // Add event listener for report generation button
+                    const reportBtn = stockContainer.querySelector('.generate-report');
+                    reportBtn.addEventListener('click', function() {
+                        generateReport(index);
+                    });
+                });
+            }
+            
+            function generateReport(index) {
+                if (!analysisResults || !analysisResults.results[index]) {
                     alert('No analysis results to generate report from.');
                     return;
                 }
+                
+                const stockData = analysisResults.results[index];
                 
                 fetch('/generate-report', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(analysisResults)
+                    body: JSON.stringify(stockData)
                 })
                 .then(response => {
                     if (response.ok) {
@@ -185,97 +317,13 @@
                     const a = document.createElement('a');
                     a.style.display = 'none';
                     a.href = url;
-                    a.download = `financial_report_${analysisResults.stock_info.symbol}.pdf`;
+                    a.download = `financial_report_${stockData.stock_info.symbol}.pdf`;
                     document.body.appendChild(a);
                     a.click();
                     window.URL.revokeObjectURL(url);
                 })
                 .catch(error => {
                     alert('Error generating report: ' + error.message);
-                });
-            });
-            
-            function displayResults(data) {
-                // Display stock info
-                const stockInfo = data.stock_info;
-                const stockDetailsEl = document.getElementById('stockDetails');
-                document.getElementById('stockName').textContent = `${stockInfo.company_name} (${stockInfo.symbol})`;
-                
-                stockDetailsEl.innerHTML = `
-                    <p><strong>Current Price:</strong> $${stockInfo.current_price.toFixed(2)}</p>
-                    <p><strong>Previous Close:</strong> $${stockInfo.previous_close.toFixed(2)}</p>
-                    <p><strong>Day Range:</strong> $${stockInfo.day_low.toFixed(2)} - $${stockInfo.day_high.toFixed(2)}</p>
-                    <p><strong>52 Week Range:</strong> $${stockInfo.year_low.toFixed(2)} - $${stockInfo.year_high.toFixed(2)}</p>
-                    <p><strong>Sector:</strong> ${stockInfo.sector}</p>
-                    <p><strong>Industry:</strong> ${stockInfo.industry}</p>
-                `;
-                
-                // Display sentiment summary
-                const sentimentResults = data.sentiment_results;
-                const sentimentCounts = {
-                    positive: 0,
-                    negative: 0,
-                    neutral: 0
-                };
-                
-                sentimentResults.forEach(result => {
-                    const sentiment = result.sentiment_analysis.sentiment;
-                    if (sentimentCounts.hasOwnProperty(sentiment)) {
-                        sentimentCounts[sentiment]++;
-                    }
-                });
-                
-                let overallSentiment = 'neutral';
-                if (sentimentCounts.positive > sentimentCounts.negative) {
-                    overallSentiment = 'positive';
-                } else if (sentimentCounts.negative > sentimentCounts.positive) {
-                    overallSentiment = 'negative';
-                }
-                
-                const sentimentSummaryEl = document.getElementById('sentimentSummary');
-                sentimentSummaryEl.innerHTML = `
-                    <p><strong>Analyzed Articles:</strong> ${sentimentResults.length}</p>
-                    <p><strong>Positive:</strong> ${sentimentCounts.positive}</p>
-                    <p><strong>Negative:</strong> ${sentimentCounts.negative}</p>
-                    <p><strong>Neutral:</strong> ${sentimentCounts.neutral}</p>
-                    <p><strong>Overall Sentiment:</strong> 
-                        <span class="sentiment-badge ${overallSentiment}">
-                            ${overallSentiment.charAt(0).toUpperCase() + overallSentiment.slice(1)}
-                        </span>
-                    </p>
-                `;
-                
-                // Display news cards
-                const newsCardsEl = document.getElementById('newsCards');
-                newsCardsEl.innerHTML = '';
-                
-                sentimentResults.forEach(result => {
-                    const article = result.article;
-                    const analysis = result.sentiment_analysis;
-                    
-                    const card = document.createElement('div');
-                    card.className = `card news-card ${analysis.sentiment}`;
-                    
-                    card.innerHTML = `
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5>${article.title}</h5>
-                            <span class="sentiment-badge ${analysis.sentiment}">
-                                ${analysis.sentiment.charAt(0).toUpperCase() + analysis.sentiment.slice(1)}
-                            </span>
-                        </div>
-                        <div class="card-body">
-                            <p class="text-muted">${article.source} | ${article.date}</p>
-                            <p>${article.content.length > 300 ? article.content.substring(0, 300) + '...' : article.content}</p>
-                            <div class="mt-3">
-                                <p><strong>Importance:</strong> ${analysis.importance}/10</p>
-                                <p><strong>Analysis:</strong> ${analysis.explanation}</p>
-                                <p><strong>Potential Impact:</strong> ${analysis.potential_impact}</p>
-                            </div>
-                            <a href="${article.url}" target="_blank" class="btn btn-outline-primary mt-2">Read Full Article</a>
-                        </div>
-                    `;
-                    
-                    newsCardsEl.appendChild(card);
                 });
             }
         });

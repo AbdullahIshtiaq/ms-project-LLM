@@ -18,7 +18,7 @@ This project is a web automation application built with Python and Playwright th
 
 ### Clone the repository
 ```bash
-git clone https://github.com/ObaidOIS/ms-project.git
+git clone 
 cd MS-Project
 ```
 

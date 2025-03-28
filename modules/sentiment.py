@@ -1,17 +1,17 @@
-import google.generativeai as genai
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+import json
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-from config import GOOGLE_API_KEY, SENTIMENT_PROMPT_TEMPLATE
-import json
+from langchain_ollama import OllamaLLM
+from config import SENTIMENT_PROMPT_TEMPLATE
 
 class SentimentAnalyzer:
     def __init__(self):
-        # Configure the Google Gemini API
-        genai.configure(api_key=GOOGLE_API_KEY)
-        
-        # Set up the model
-        self.llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=GOOGLE_API_KEY)
+        # Set up the Ollama model with DeepSeek R1:1.5B
+        self.llm = OllamaLLM(
+            model="deepseek-r1:1.5b",
+            # If you need to connect to a remote Ollama instance, uncomment:
+            # base_url="http://localhost:11434"
+        )
         
         # Create a template for sentiment analysis with RAG
         self.template = PromptTemplate(
@@ -24,7 +24,7 @@ class SentimentAnalyzer:
         self.chain = LLMChain(llm=self.llm, prompt=self.template)
     
     def analyze_news(self, news_articles, stock_info, stock_history):
-        """Analyze sentiment of news articles using Gemini with RAG"""
+        """Analyze sentiment of news articles using DeepSeek R1 with RAG"""
         results = []
         
         for article in news_articles:

@@ -3,6 +3,24 @@
 def get_mock_stock_info(symbol):
     """Get mock stock info for testing"""
     mock_data = {
+        'INVALID': {
+            'symbol': 'UNKNOWN',
+            'company_name': 'Unknown Company',
+            'sector': 'Unknown',
+            'industry': 'Unknown',
+            'current_price': 100.00,
+            'previous_close': 100.00,
+            'open': 100.00,
+            'day_high': 100.00,
+            'day_low': 100.00,
+            'year_high': 120.00,
+            'year_low': 80.00,
+            'market_cap': 1000000000,
+            'volume': 1000000,
+            'pe_ratio': 20.00,
+            'dividend_yield': 1.0,
+            'description': 'This is mock data for an invalid symbol.'
+        },
         'AAPL': {
             'symbol': 'AAPL',
             'company_name': 'Apple Inc.',
@@ -81,6 +99,66 @@ def get_mock_stock_info(symbol):
 
 def get_mock_news_articles(symbol, count=5):
     """Get mock news articles for testing"""
+    # General financial news articles (not tied to specific stocks)
+    general_financial_news = [
+        {
+            'title': 'Market Rebounds After Recent Selloff',
+            'url': 'https://example.com/market-rebound',
+            'date': '2023-03-12',
+            'source': 'Financial News Today',
+            'content': 'Markets showed signs of recovery today after last week\'s selloff, with technology stocks leading the charge. Analysts point to strong economic data and renewed optimism about inflation control as key factors driving the rebound. Apple (AAPL) and Microsoft (MSFT) were among the top performers.',
+            'related_symbol': None
+        },
+        {
+            'title': 'Fed Signals Potential Rate Cut Later This Year',
+            'url': 'https://example.com/fed-signals',
+            'date': '2023-03-10',
+            'source': 'Economic Times',
+            'content': 'The Federal Reserve has indicated it may consider rate cuts later this year if inflation continues to trend downward. This news sent stocks higher as investors anticipated improved conditions for growth-oriented companies like Amazon (AMZN) and Tesla (TSLA).',
+            'related_symbol': None
+        },
+        {
+            'title': 'Tech Sector Leads Market Rally Amid AI Optimism',
+            'url': 'https://example.com/tech-sector-rally',
+            'date': '2023-03-14',
+            'source': 'Tech Investor Daily',
+            'content': 'The technology sector led a broad market rally today as investors remain optimistic about AI development prospects. Nvidia (NVDA) shares jumped 4% after announcing new AI chip advancements, while Google parent Alphabet (GOOGL) gained 2.5% on news of AI integration across its services.',
+            'related_symbol': None
+        },
+        {
+            'title': 'Oil Prices Stabilize Following Supply Concerns',
+            'url': 'https://example.com/oil-stabilizes',
+            'date': '2023-03-13',
+            'source': 'Energy Market Watch',
+            'content': 'Oil prices stabilized today after volatile trading last week caused by concerns over global supply. Energy stocks like Exxon Mobil (XOM) and Chevron (CVX) saw modest gains as analysts predicted more balanced markets in the coming months.',
+            'related_symbol': None
+        },
+        {
+            'title': 'Retail Sales Data Exceeds Expectations, Boosting Consumer Stocks',
+            'url': 'https://example.com/retail-sales-data',
+            'date': '2023-03-11',
+            'source': 'Market Insights',
+            'content': 'The latest retail sales data showed stronger-than-expected consumer spending, pushing consumer discretionary stocks higher. Amazon (AMZN) and Walmart (WMT) were standout performers as analysts upgraded their revenue forecasts for the quarter.',
+            'related_symbol': None
+        },
+        {
+            'title': 'Banking Sector Stabilizes After Recent Volatility',
+            'url': 'https://example.com/banking-stabilizes',
+            'date': '2023-03-09',
+            'source': 'Financial Sector News',
+            'content': 'The banking sector showed signs of stabilization today following recent volatility. JPMorgan Chase (JPM) and Bank of America (BAC) led the gains after positive comments from regulatory officials regarding the sector\'s overall health.',
+            'related_symbol': None
+        },
+        {
+            'title': 'Semiconductor Shortage Easing, Industry Reports',
+            'url': 'https://example.com/semiconductor-shortage',
+            'date': '2023-03-08',
+            'source': 'Tech Supply Chain News',
+            'content': 'Industry reports suggest the global semiconductor shortage is gradually easing, which could benefit technology and automotive manufacturers. Intel (INTC) and AMD (AMD) shares rose on expectations of improved production capacity.',
+            'related_symbol': None
+        }
+    ]
+    
     common_articles = [
         {
             'title': 'Market Rebounds After Recent Selloff',
@@ -100,6 +178,11 @@ def get_mock_news_articles(symbol, count=5):
         }
     ]
     
+    # If the symbol is "GENERAL", return general financial news
+    if symbol == "GENERAL":
+        return general_financial_news[:count]
+        
+    # Rest of the function remains the same for specific stock symbols
     symbol_specific_articles = {
         'AAPL': [
             {

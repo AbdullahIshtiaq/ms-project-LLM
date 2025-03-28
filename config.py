@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # API configuration
-GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')  # No longer needed for sentiment analysis which now uses DeepSeek R1 via Ollama
 
 # News sources
 NEWS_SOURCES = {
@@ -16,7 +16,7 @@ NEWS_SOURCES = {
 }
 
 # Stock data configuration
-STOCK_HISTORY_PERIOD = '6mo'  # 6 months of historical data
+STOCK_HISTORY_PERIOD = '1mo'  # 6 months of historical data
 
 # Sentiment analysis
 SENTIMENT_PROMPT_TEMPLATE = """
