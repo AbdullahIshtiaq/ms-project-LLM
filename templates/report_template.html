@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Report - {{ stock_info.symbol }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+        .date {
+            text-align: right;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .stock-info {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            color: #2c3e50;
+        }
+        .article {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #ddd;
+        }
+        .article-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .article-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .sentiment {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .sentiment.positive {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+        .sentiment.negative {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        .sentiment.neutral {
+            background-color: rgba(108, 117, 125, 0.2);
+            color: #6c757d;
+        }
+        .summary {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 40px;
+        }
+        .summary-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .overall-sentiment {
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        .overall-sentiment.positive {
+            color: #28a745;
+        }
+        .overall-sentiment.negative {
+            color: #dc3545;
+        }
+        .overall-sentiment.neutral {
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Financial News Sentiment Analysis</h1>
+        <h2>{{ stock_info.company_name }} ({{ stock_info.symbol }})</h2>
+    </div>
+    
+    <div class="date">
+        Generated on: {{ generation_date }}
+    </div>
+    
+    <div class="stock-info">
+        <h3>Stock Information</h3>
+        <p><strong>Current Price:</strong> ${{ "%.2f"|format(stock_info.current_price) }}</p>
+        <p><strong>Previous Close:</strong> ${{ "%.2f"|format(stock_info.previous_close) }}</p>
+        <p><strong>Day Range:</strong> ${{ "%.2f"|format(stock_info.day_low) }} - ${{ "%.2f"|format(stock_info.day_high) }}</p>
+        <p><strong>52 Week Range:</strong> ${{ "%.2f"|format(stock_info.year_low) }} - ${{ "%.2f"|format(stock_info.year_high) }}</p>
+        <p><strong>Sector:</strong> {{ stock_info.sector }}</p>
+        <p><strong>Industry:</strong> {{ stock_info.industry }}</p>
+    </div>
+    
+    <h2 class="section-title">News Sentiment Analysis</h2>
+    
+    {% for result in sentiment_results %}
+    <div class="article">
+        <div class="article-title">{{ result.article.title }}</div>
+        <div class="article-meta">{{ result.article.source }} | {{ result.article.date }}</div>
+        <div class="sentiment {{ result.sentiment_analysis.sentiment }}">
+            {{ result.sentiment_analysis.sentiment|capitalize }}
+        </div>
+        <p><strong>Importance:</strong> {{ result.sentiment_analysis.importance }}/10</p>
+        <p><strong>Analysis:</strong> {{ result.sentiment_analysis.explanation }}</p>
+        <p><strong>Potential Impact:</strong> {{ result.sentiment_analysis.potential_impact }}</p>
+    </div>
+    {% endfor %}
+    
+    <div class="summary">
+        <div class="summary-title">Summary and Recommendations</div>
+        <p><strong>Analyzed Articles:</strong> {{ sentiment_results|length }}</p>
+        <p><strong>Positive Articles:</strong> {{ positive_count }}</p>
+        <p><strong>Negative Articles:</strong> {{ negative_count }}</p>
+        <p><strong>Neutral Articles:</strong> {{ neutral_count }}</p>
+        
+        <div class="overall-sentiment {{ overall_sentiment|lower }}">
+            Overall Sentiment: {{ overall_sentiment }}
+        </div>
+    </div>
+</body>
+</html> 
