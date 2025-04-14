@@ -271,9 +271,9 @@ def create_stock_news(article_text, article_url, title, date_posted):
     If no LSE stock or index mentions are detected, return an empty list for "mentions".
 
     IMPORTANT: Return an empty list for "mentions" if the article is not latest news, such as:
-    - Monthly/yearly summaries (e.g., "أهم الأحداث", "أبرز الأخبار")
-    - Historical reviews (e.g., "خلال عام", "خلال الشهر", "منذ بداية العام")
-    - Look-back articles (e.g., "في الفترة الماضية", "خلال الفترة")
+    - Monthly/yearly summaries 
+    - Historical reviews 
+    - Look-back articles
     """
 
     # Use LangChain for local inference
