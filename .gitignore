@@ -1,6 +1,2 @@
 .qodo
-proposal.txt
-/cache
-/reports
-/_pycache_
-*.pyc
+.env

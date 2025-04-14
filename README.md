@@ -1,94 +1,156 @@
-# MS Project
+# Moon Project Django
 
-## Overview
-This project is a web automation application built with Python and Playwright that enables browser automation and testing.
+A Django-based news analysis application that processes financial news articles, extracts stock mentions, and detects important events.
 
-## Features
-- Browser automation with Playwright
-- Python-based web interaction
-- [Add any additional features here]
+## Project Setup
 
-## Prerequisites
-- Python 3.6 or higher
+This guide will walk you through setting up the project from scratch, including creating a virtual environment, installing dependencies, and running migrations.
+
+### Prerequisites
+
+- Python 3.8 or higher
 - pip (Python package installer)
-- virtualenv (install globally with `pip install virtualenv`)
 - Git (for cloning the repository)
 
-## Installation
+### 1. Clone the Repository
 
-### Clone the repository
 ```bash
-git clone 
-cd MS-Project
+git clone <repository-url>
+cd moon-project-django
 ```
 
-### Setup the environment
-1. Create a virtual environment:
-```bash
-virtualenv venv
-```
+### 2. Set Up a Virtual Environment
 
-2. Activate the virtual environment:
+#### Windows
 
-On Windows:
 ```bash
+# Create a virtual environment
+python -m venv venv
+
+# Activate the virtual environment
 venv\Scripts\activate
 ```
 
-On macOS/Linux:
+#### macOS/Linux
+
 ```bash
+# Create a virtual environment
+python3 -m venv venv
+
+# Activate the virtual environment
 source venv/bin/activate
 ```
 
-3. Install dependencies:
+### 3. Install Dependencies
+
 ```bash
+# Install required packages
 pip install -r requirements.txt
 ```
 
-4. Install Playwright browser (Chromium):
+### 4. Configure Environment Variables
+
+Create a `.env` file in the project root directory by copying the example file:
+
 ```bash
-python -m playwright install chromium
+cp .env.example .env
 ```
 
-## Usage
-Run the application with:
-```bash
-python app.py
+Then edit the `.env` file to set your environment variables:
+
 ```
+DEBUG=True
+SECRET_KEY=your_secret_key_here
+ALLOWED_HOSTS=localhost,127.0.0.1
+ALPHA_VANTAGE_API_KEY=your_alpha_vantage_api_key_here
+MARKETSTACK_API_KEY=your_marketstack_api_key_here
+```
+
+Replace `your_secret_key_here` with a secure random string, `your_alpha_vantage_api_key_here` with your Alpha Vantage API key, and `your_marketstack_api_key_here` with your Marketstack API key.
+
+### 5. Run Database Migrations
+
+```bash
+# Make migrations
+python manage.py makemigrations
+
+# Apply migrations
+python manage.py migrate
+```
+
+### 6. Create a Superuser (Optional)
+
+```bash
+python manage.py createsuperuser
+```
+
+Follow the prompts to create an admin user.
+
+### 7. Run the Development Server
+
+```bash
+python manage.py runserver
+```
+
+The application should now be running at `http://127.0.0.1:8000/`.
 
 ## Project Structure
-```
-Moon-Project/
-├── app.py               # Main application entry point
-├── requirements.txt     # Project dependencies
-├── [other directories]  # [description]
-└── [other files]        # [description]
-```
 
-## Configuration
-[Add any configuration details here]
+- `news_analyzer/`: Main application directory
+  - `article_processor.py`: Handles article processing and event detection
+  - `models.py`: Database models
+  - `utils.py`: Utility functions
+  - `views.py`: View functions
+  - `urls.py`: URL routing
+  - `fetch_lse_stocks.py`: Fetches stock information from Alpha Vantage API
+  - `fetch_lse_stocks_marketstack.py`: Fetches stock information from Marketstack API
 
-## Dependencies
-The project relies on the following main dependencies:
-- Playwright: For browser automation
-- [Add any other major dependencies here]
+## Features
 
-For a complete list of dependencies, see `requirements.txt`.
+- News article processing and storage
+- Stock mention extraction
+- Event detection and categorization
+- Sentiment analysis
+- User notifications
+- LSE stock information fetching from Alpha Vantage API
+- LSE stock information fetching from Marketstack API
 
-## Development
-[Add development guidelines here]
+## Stock Data Management
+
+The application provides two methods for fetching LSE stock information:
+
+1. **Alpha Vantage API**:
+   ```bash
+   python manage.py update_lse_stocks
+   ```
+
+2. **Marketstack API** (recommended):
+   ```bash
+   python manage.py update_lse_stocks_marketstack
+   ```
+
+The Marketstack implementation is recommended as it provides more comprehensive data in a single request.
 
 ## Troubleshooting
-Common issues and their solutions:
 
-1. **Browser not launching**: Make sure Playwright browsers are properly installed with `python -m playwright install chromium`.
+### Common Issues
 
-2. **Missing dependencies**: Ensure all dependencies are installed by running `pip install -r requirements.txt`.
+1. **Database Connection Errors**
+   - Ensure your database server is running
+   - Verify your database credentials in the `.env` file
 
-3. **Virtual environment issues**: If you encounter issues with the virtual environment, try recreating it:
-   ```bash
-   rm -rf venv
-   virtualenv venv
-   venv\Scripts\activate  # Windows
-   source venv/bin/activate  # macOS/Linux
-   ```
+2. **Migration Errors**
+   - Try running `python manage.py migrate --fake-initial` if initial migrations fail
+
+3. **Dependency Issues**
+   - Make sure you're using the correct Python version
+   - Try reinstalling dependencies with `pip install -r requirements.txt --force-reinstall`
+
+4. **API Issues**
+   - Verify your API keys are correctly set in the `.env` file
+   - Check if you've exceeded the API rate limits
+   - For Marketstack API issues, refer to their [documentation](https://marketstack.com/documentation_v2)
+
+## License
+
+[Specify your license here] 
