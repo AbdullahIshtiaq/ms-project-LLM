@@ -39,9 +39,9 @@ class StockData:
                 info = stock.info
                 
                 # Check if we got valid info
-                if not info or not isinstance(info, dict) or len(info) < 5:
-                    print(f"Incomplete data received for {symbol}")
-                    raise ValueError(f"Incomplete data for {symbol}")
+                # if not info or not isinstance(info, dict) or len(info) < 5:
+                #     print(f"Incomplete data received for {symbol}")
+                #     raise ValueError(f"Incomplete data for {symbol}")
                 
                 # Extract relevant information
                 relevant_info = {
@@ -73,8 +73,8 @@ class StockData:
             except Exception as e:
                 print(f"Attempt {attempt+1}/{max_retries}: Error fetching stock info for {symbol}: {e}")
                 # Wait longer before retry
-                if attempt < max_retries - 1:
-                    time.sleep(random.uniform(3, 5))
+                # if attempt < max_retries - 1:
+                #     time.sleep(random.uniform(3, 5))
         
         # If all retries fail, use mock data
         print(f"All attempts failed - using mock data for {symbol}")
@@ -99,8 +99,8 @@ class StockData:
                 
                 # Check if the ticker exists by trying to get info
                 info = stock.info
-                if not info or len(info) < 5:
-                    raise ValueError(f"Invalid ticker symbol: {symbol}")
+                # if not info or len(info) < 5:
+                #     raise ValueError(f"Invalid ticker symbol: {symbol}")
                 
                 history = stock.history(period=STOCK_HISTORY_PERIOD)
                 print(f"History data fetched - {len(history)} records")
@@ -126,8 +126,8 @@ class StockData:
             except Exception as e:
                 print(f"Attempt {attempt+1}/{max_retries}: Error fetching historical data for {symbol}: {e}")
                 # Wait longer before retry
-                if attempt < max_retries - 1:
-                    time.sleep(random.uniform(3, 5))
+                # if attempt < max_retries - 1:
+                #     time.sleep(random.uniform(3, 5))
         
         # If all retries fail, return empty list
         print(f"All attempts failed to get historical data for {symbol}")
