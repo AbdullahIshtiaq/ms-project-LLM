@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import StockCompany, StockName, NewsArticle, StockEvent
+from .models import StockCompany, StockName, NewsArticle, NewsSentiment
 
 @admin.register(StockCompany)
 class StockCompanyAdmin(admin.ModelAdmin):
@@ -21,11 +21,11 @@ class NewsArticleAdmin(admin.ModelAdmin):
     list_filter = ('publication_date',)
     ordering = ('-publication_date',)
 
-@admin.register(StockEvent)
-class StockEventAdmin(admin.ModelAdmin):
-    list_display = ('mentioned_stock_name', 'event_type', 'importance', 'sentiment', 'created_at')
+@admin.register(NewsSentiment)
+class NewsSentimentAdmin(admin.ModelAdmin):
+    list_display = ('mentioned_stock_name', 'importance', 'sentiment', 'created_at')
     search_fields = ('mentioned_stock_name', 'description')
-    list_filter = ('event_type', 'importance', 'sentiment')
+    list_filter = ('importance', 'sentiment')
     ordering = ('-created_at',)
 
 

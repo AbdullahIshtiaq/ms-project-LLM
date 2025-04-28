@@ -1,6 +1,5 @@
 .qodo
 .env
-venv/
 
 # Python cache files
 __pycache__/

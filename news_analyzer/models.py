@@ -35,29 +35,11 @@ class NewsArticle(models.Model):
     publication_date = models.DateTimeField(null=True)
     stock_mentions = models.JSONField(default=list)  # Store mentions as a list of dicts
     created_at = models.DateTimeField(auto_now_add=True)  
+    analyzed = models.BooleanField(default=False)
+    analyzed_at = models.DateTimeField(null=True, blank=True)
 
 
-class StockEvent(models.Model):
-    EVENT_TYPES = [
-        ('FINANCIAL_REPORT', 'Financial Report'),
-        ('DIVIDEND_ANNOUNCEMENT', 'Dividend Announcement'),
-        ('STOCK_SPLIT', 'Stock Split'),
-        ('MERGER_ACQUISITION', 'Merger or Acquisition'),
-        ('MANAGEMENT_CHANGE', 'Management Change'),
-        ('NEW_LISTING', 'New Listing'),
-        ('DELISTING', 'Delisting'),
-        ('REGULATORY_ACTION', 'Regulatory Action'),
-        ('PRODUCT_LAUNCH', 'Major Product Launch'),
-        ('PARTNERSHIP', 'Strategic Partnership'),
-        ('LEGAL_ISSUE', 'Legal Issue or Lawsuit'),
-        ('MARKET_EXPANSION', 'Market Expansion'),
-        ('RESTRUCTURING', 'Company Restructuring'),
-        ('EARNINGS_SURPRISE', 'Significant Earnings Surprise'),
-        ('INSIDER_TRADING', 'Significant Insider Trading'),
-        ('ANALYST_RATING_CHANGE', 'Major Analyst Rating Change'),
-        ('OTHER', 'Other Important Event'),
-    ]
-
+class NewsSentiment(models.Model):
     SENTIMENT_CHOICES = [
         ('VP', 'Very Positive'),
         ('P', 'Positive'),
@@ -75,15 +57,44 @@ class StockEvent(models.Model):
     ]
 
     article = models.ForeignKey(NewsArticle, on_delete=models.CASCADE, related_name='events_old')
-    stock_symbol = models.ForeignKey(StockCompany, on_delete=models.CASCADE, null=True, blank=True, related_name='events')
+    stock_symbol = models.ManyToManyField(StockCompany, null=True, blank=True, related_name='events')
     stock_name = models.CharField(max_length=255, null=True, blank=True)
     mentioned_stock_name = models.CharField(max_length=255)
-    event_type = models.CharField(max_length=25, choices=EVENT_TYPES)
     importance = models.CharField(max_length=10, choices=IMPORTANCE_CHOICES, default='REGULAR')
-    description = models.TextField()
+    summary = models.TextField()
     sentiment = models.CharField(max_length=2, choices=SENTIMENT_CHOICES, null=True, blank=True)
+    reason = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+
+class StockDetail(models.Model):
+    STOCK_CATEGORIES = [
+        ('LEADERSHIP', 'leadership'),
+        ('GROWTH', 'growth'),
+        ('DIVIDEND', 'dividend'),
+        ('DEFENSIVE', 'defensive'),
+        ('CYCLICAL', 'cyclical'),
+        ('VALUE', 'value'),
+        ('SPECULATIVE', 'speculative'),
+        ('INVESTMENT', 'investment'),
+        ('LOSING', 'losing'),
+    ]
+    stock_symbol = models.OneToOneField(
+        StockCompany, on_delete=models.CASCADE, related_name="stock_detail"
+    )
+    sector_id = models.CharField(max_length=100, null=True, blank=True)
+    market_id = models.CharField(max_length=100, null=True, blank=True)
+    initial_shares = models.BigIntegerField(null=True, blank=True)
+    total_stocks = models.BigIntegerField(null=True, blank=True)
+    first_trading = models.DateTimeField(null=True, blank=True)
+    is_delisted = models.BooleanField(default=False)
+    is_etf = models.BooleanField(default=False)
+    primary_category = models.CharField(max_length=20, choices=STOCK_CATEGORIES, null=True, blank=True)
+    secondary_category = models.CharField(max_length=20, choices=STOCK_CATEGORIES, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.get_event_type_display()} for {self.mentioned_stock_name}"
+        return f"{self.stock_symbol.symbol} - {self.sector_id}"

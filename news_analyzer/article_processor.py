@@ -1,26 +1,20 @@
 import json
 import hashlib
 from datetime import datetime
-import requests
 from .utils import get_final_stock, clean_text
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-from langchain_ollama import OllamaLLM
 from .stock_data import StockData
+from .llm_client import OpenRouterClient
 
-# Initialize Ollama LLM
-ollama_llm = OllamaLLM(
-    model="deepseek-r1:1.5b",
-    # If you need to connect to a remote Ollama instance, uncomment:
-    # base_url="http://localhost:11434"
-)
+# # Initialize OpenRouterClient
+client = OpenRouterClient(api_key="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")
 
-from .models import NewsArticle, StockCompany, StockEvent
+
+from .models import NewsArticle, StockCompany, NewsSentiment
 
 # Initialize StockData
 stock_data = StockData()
 
-def detect_and_create_events(article, mentioned_stocks, stock_companies):
+def analyze_sentiment(article, mentioned_stocks, stock_companies):
     """Process a news article to extract stock mentions and events.
     
     Args:
@@ -52,74 +46,75 @@ def detect_and_create_events(article, mentioned_stocks, stock_companies):
                     stock_history_context += f"- {day['date']}: Open: {day['open']}, Close: {day['close']}, Volume: {day['volume']}\n"
 
         prompt = f"""
-Today is {datetime.now().strftime("%B %d, %Y")}. Analyze the following financial news article carefully. Detect any **recent** or **upcoming** important events related to the stocks or companies mentioned: {mentioned_stocks_str}.
-Focus on current, or anticipated significant events that could have a material impact on the company's operations, financials, or stock price.
+Today is {datetime.now().strftime("%B %d, %Y")}.  
+Analyze the following financial news article carefully. Based on Loughran-McDonald financial sentiment categories, determine the **overall sentiment** of the article as it relates to the companies mentioned: {mentioned_stocks_str}. Choose one of:
+- very positive  
+- positive  
+- slightly positive  
+- neutral  
+- slightly negative  
+- negative  
+- very negative  
 
-{stock_history_context}
+Also assign an **importance** level—CRITICAL, IMPORTANT, or REGULAR—based on how material the news is to the company's prospects.  
 
-**Only consider the most recent events or those anticipated in the immediate future. Disregard any events that are not current or upcoming.**
+Then, provide:
+1. **company_name**: which company this analysis refers to (one of {mentioned_stocks_str})  
+2. **summary**: a brief, standalone summary in fluent English (like a headline or very short news snippet), naming the company and key facts  
+3. **reasons**: a list of concise lines explaining why you chose that sentiment (can be multiple)
 
-Consider these event types:
-- FINANCIAL_REPORT: Quarterly or annual financial results
-- DIVIDEND_ANNOUNCEMENT: Declaration of dividends
-- STOCK_SPLIT: Announcement of a stock split
-- MERGER_ACQUISITION: Mergers, acquisitions, or major investments
-- MANAGEMENT_CHANGE: Changes in key leadership positions (CEO, CFO, etc.)
-- NEW_LISTING: Initial public offerings or new stock listings
-- DELISTING: Company being delisted from a stock exchange
-- REGULATORY_ACTION: Major regulatory decisions affecting the company
-- PRODUCT_LAUNCH: Launch of significant new products or services
-- PARTNERSHIP: Formation of major strategic partnerships
-- LEGAL_ISSUE: Significant legal challenges or resolutions
-- MARKET_EXPANSION: Entry into new markets or significant expansion
-- RESTRUCTURING: Major company reorganizations
-- EARNINGS_SURPRISE: Earnings significantly above or below expectations
-- INSIDER_TRADING: Substantial insider buying or selling
-- ANALYST_RATING_CHANGE: Significant changes in analyst recommendations
-- OTHER: Any other event that could materially impact the company
+Respond **only** in this JSON format (valid and properly escaped):
+{{
+  "sentiment": "…",
+  "importance": "…",
+  "company_name": "…",
+  "summary": "…",
+  "reasons": [
+    "Reason 1: very concise explanation",
+    "Reason 2: another short explanation",
+    "Reason 3: etc."
+  ]
+}}
 
-Note: Daily stock price movements or minor fluctuations in market cap are not considered significant events unless they are exceptionally large or unusual.
-
-Title:
+Article Title:
 {title}
+
 Article:
 {article_text}
-
-Categorize each event's importance as follows:
-- CRITICAL: Events with immediate and significant impact (e.g., major mergers, unexpected CEO departures, extreme earnings surprises)
-- IMPORTANT: Events with notable impact but not requiring immediate attention (e.g., new partnerships, market expansions)
-- REGULAR: Events worth noting but with less immediate impact (e.g., minor management changes, small product updates)
-
-Respond in the following JSON format. Ensure that the JSON is valid and all strings are properly escaped:
-{{
-    "events": [
-        {{
-            "event_type": "One of the event types listed above",
-            "importance": "CRITICAL, IMPORTANT, or REGULAR",
-            "company_name": "The name of the company this event relates to. one of {mentioned_stocks_str}",
-            "English_description": "Provide a brief, concise description of the event in fluent English, suitable for a LSE audience. Consider it a standalone description so include the name of the company and key facts, but keep it short and to the point. The description should read like a headline or a very short news snippet.",
-            "sentiment": "The sentiment towards the company related to this specific. Choose from: very positive, positive, slightly positive, neutral, slightly negative, negative, very negative. Base this on the potential impact of the event on the company's prospects."
-        }}
-    ]
-}}
-If no significant events are detected, return an empty list for "events".
         """
         try:
             # Use LangChain for local inference
             try:
-                result = ollama_llm.invoke(prompt)
-                print("DETECT_AND_CREATE_EVENTS Result: ", result)
-                parsed_result = json.loads(result)
-            except requests.exceptions.ConnectionError:
-                print(f"Connection error to Ollama. Is Ollama running?")
+                # result = ollama_llm.invoke(prompt)
+                result = client.chat_completion(
+                        messages=[{"role": "user", "content": prompt}],
+                        model_name="deepseek",
+                        # temperature=0.7
+                    )
+                print("analyze_sentiment Result: ", result)
+                
+                # Extract the content from the OpenRouter API response
+                if isinstance(result, dict) and 'choices' in result and len(result['choices']) > 0:
+                    content = result['choices'][0]['message']['content']
+                    
+                    # Clean up the response by removing any non-JSON content
+                    if isinstance(content, str):
+                        # Find the first occurrence of a JSON-like structure
+                        json_start = content.find('{')
+                        if json_start != -1:
+                            content = content[json_start:]
+                        # Find the last occurrence of a closing brace
+                        json_end = content.rfind('}')
+                        if json_end != -1:
+                            content = content[:json_end + 1]
+                    
+                    parsed_result = json.loads(content)
+                else:
+                    print("Invalid response format from OpenRouter API")
+                    return []
+            except Exception as e:
+                print(f"Error calling OpenRouter API: {str(e)}")
                 return []
-            except json.JSONDecodeError as json_error:
-                print(f"JSON parsing error in detect_and_create_events: {str(json_error)}")
-                return []
-            except Exception as api_error:
-                print(f"Error calling Ollama in detect_and_create_events: {str(api_error)}")
-                return []
-            
             sentiment_map = {
                 'very positive': 'VP',
                 'positive': 'P',
@@ -130,89 +125,42 @@ If no significant events are detected, return an empty list for "events".
                 'very negative': 'VN',
             }
             
-            created_events = []
-            for i, event in enumerate(parsed_result.get('events', [])):
+
+            # save result to NewsSentiment 
+
+            news_sentiment = NewsSentiment.objects.create(
+                article=article,
+                mentioned_stock_name=mentioned_stocks_str,
+                importance=parsed_result.get('importance', 'REGULAR'),
+                summary=parsed_result.get('summary', ''),
+                sentiment=sentiment_map.get(parsed_result.get('sentiment'), None),
+                reason='; '.join(parsed_result.get('reasons', []))
+            )
+
+            news_article = NewsArticle.objects.get(id=article.id)
+            news_article.analyzed = True
+            news_article.analyzed_at = datetime.now()
+            news_article.save()
+            # Add many-to-many relationships for stock symbols
+            for stock in stock_companies:
                 try:
-                    company_name = event['company_name']
-                    sentiment = sentiment_map.get(event['sentiment'].lower(), 'N')
-                    stock_name = None
-                    if event['event_type'] not in ['NEW_LISTING']:
-                        try:
-                            index_of_stock = mentioned_stocks.index(company_name)
-                            # Determine stock symbol based on verification
-                            stock_symbol = stock_companies[index_of_stock]
-                        except ValueError:
-                            print(f"ValueError: company_name '{company_name}' not found in mentioned_stocks: {mentioned_stocks}")
-                            stock_info = get_final_stock(company_name)
-                            if stock_info:
-                                print("Found stock info:", stock_info)
-                                stock_symbol, name = stock_info
-                                # stock_name = stock_name.replace(".SR", "")
-                                stock_name = name
-                            else:
-                                print("No stock info found. Setting stock_symbol to None")
-                                stock_symbol = None
-                                stock_name = None
-                    else:
-                        stock_symbol = None
-                        stock_name = None
-                    
-                    if stock_symbol:
-                        print(f"SEARCHING FOR STOCK SYMBOL: {stock_symbol}")
-                        try:
-                            stock_company = StockCompany.objects.get(symbol=stock_symbol)
-                        except StockCompany.DoesNotExist:
-                            print(f"StockCompany with symbol {stock_symbol} not found")
-                            stock_company = None
-                        except Exception as stock_error:
-                            print(f"Error getting StockCompany: {str(stock_error)}")
-                            stock_company = None
-                    else:
-                        stock_company = None
-                    
-                    try:
-                        stock_event = StockEvent.objects.create(
-                            article=article,
-                            stock_symbol=stock_company,
-                            stock_name=stock_name,
-                            mentioned_stock_name=company_name,
-                            event_type=event['event_type'],
-                            importance=event['importance'],
-                            description=event['English_description'],
-                            sentiment=sentiment
-                        )
-                        created_events.append(stock_event)
-                        print(f"Created event: {stock_event.id} - {company_name} - {event['event_type']}")
-                    except Exception as create_error:
-                        print(f"Error creating StockEvent: {str(create_error)}")
-                        
-                    if event['event_type'] == 'NEW_LISTING':
-                        print("NEW LISTING EVENT")
-                except Exception as event_error:
-                    print(f"Error processing event: {str(event_error)}")
-                    continue
-                    
-            return created_events
-        except Exception as e:
-            print(f"Error in processing article: {str(e)}")
-            return []
+                    stock_company = StockCompany.objects.get(symbol=stock)
+                    news_sentiment.stock_symbol.add(stock_company)
+                except StockCompany.DoesNotExist:
+                    print(f"Stock company not found: {stock}")
+            print(f"Created news sentiment: {news_sentiment.id} for article: {article.id}")
+
+            # Save the sentiment object
+            news_sentiment.save()
+            # Return the created sentiment object
+            return news_sentiment
+        except Exception as e:  
+            print(f"Error processing sentiment: {str(e)}")
+            return {}
     except Exception as e:
-        print(f"Error in detect_and_create_events: {str(e)}")
-        return []
+        print(f"Error in analyze_sentiment: {str(e)}")
+        return {}
 
-
-def create_news_article(article_url, title, article_text, news_hash, published_date):
-    """Create a news article in the database."""
-    news_article, created = NewsArticle.objects.get_or_create(
-        url=article_url,
-        defaults={
-            'title': title,
-            'full_text': article_text,
-            'news_hash': news_hash,
-            'publication_date': published_date
-        }
-    )
-    return news_article, created
 
 def create_stock_news(article_text, article_url, title, date_posted):
     # Clean the article text
@@ -271,33 +219,57 @@ def create_stock_news(article_text, article_url, title, date_posted):
     If no LSE stock or index mentions are detected, return an empty list for "mentions".
 
     IMPORTANT: Return an empty list for "mentions" if the article is not latest news, such as:
-    - Monthly/yearly summaries 
-    - Historical reviews 
-    - Look-back articles
+    - Monthly/yearly summaries (e.g., "أهم الأحداث", "أبرز الأخبار")
+    - Historical reviews (e.g., "خلال عام", "خلال الشهر", "منذ بداية العام")
+    - Look-back articles (e.g., "في الفترة الماضية", "خلال الفترة")
+    
+    IMPORTANT: The key in your response MUST be "mentions" (plural), not "mention" (singular).
     """
 
     # Use LangChain for local inference
     try:
-        result = ollama_llm.invoke(prompt)
+        # result = ollama_llm.invoke(prompt)
+        result = client.chat_completion(
+            messages=[{"role": "user", "content": prompt}],
+            model_name="deepseek",
+            # temperature=0.7
+        )
         print("CREATE STOCK NEWS Result: ", result)
-        parsed_result = json.loads(result)
-        print(f"Parsed result: {parsed_result}")
-    except requests.exceptions.ConnectionError:
-        print(f"Connection error to Ollama. Is Ollama running?")
-        # Continue with empty mentions
-        parsed_result = {"mentions": []}
-    except json.JSONDecodeError as json_error:
-        print(f"JSON parsing error: {str(json_error)}")
-        # Continue with empty mentions
-        parsed_result = {"mentions": []}
-    except Exception as api_error:
-        print(f"Error calling Ollama: {str(api_error)}")
-        # Continue with empty mentions
+        
+        # Extract the content from the OpenRouter API response
+        if isinstance(result, dict) and 'choices' in result and len(result['choices']) > 0:
+            content = result['choices'][0]['message']['content']
+            
+            # Clean up the response by removing any non-JSON content
+            if isinstance(content, str):
+                # Find the first occurrence of a JSON-like structure
+                json_start = content.find('{')
+                if json_start != -1:
+                    content = content[json_start:]
+                # Find the last occurrence of a closing brace
+                json_end = content.rfind('}')
+                if json_end != -1:
+                    content = content[:json_end + 1]
+            
+            parsed_result = json.loads(content)
+            print(f"Parsed result: {parsed_result}")
+        else:
+            print("Invalid response format from OpenRouter API")
+            parsed_result = {"mentions": []}
+    except Exception as e:
+        print(f"Error calling OpenRouter API: {str(e)}")
         parsed_result = {"mentions": []}
 
     stock_mentions = []
 
-    for mention in parsed_result['mentions']:
+    # Handle both "mention" and "mentions" keys
+    mentions_list = []
+    if 'mentions' in parsed_result:
+        mentions_list = parsed_result['mentions']
+    elif 'mention' in parsed_result:
+        mentions_list = parsed_result['mention']
+    
+    for mention in mentions_list:
         name = mention
         stock_info = get_final_stock(mention, exact_only=True)
         if stock_info:
@@ -333,24 +305,9 @@ def create_stock_news(article_text, article_url, title, date_posted):
     except Exception as update_error:
         print(f"Error updating news article with stock mentions: {str(update_error)}")
 
-    # Process events if needed
-    created_events = []
-    if stock_mentions:
-        all_mentioned_names = [m['mentioned_name'] for m in stock_mentions]
-        all_stock_companies = [m['stock_company'] for m in stock_mentions]
-        batch_size = 7
-        for i in range(0, len(all_mentioned_names), batch_size):
-            batch_mentioned_stocks = all_mentioned_names[i:i+batch_size]
-            batch_is_verified_stocks = all_stock_companies[i:i+batch_size]
-            try:
-                batch_events = detect_and_create_events(news_article, batch_mentioned_stocks, batch_is_verified_stocks)
-                created_events.extend(batch_events)
-            except Exception as event_error:
-                print(f"Error creating events for batch: {str(event_error)}")
-            
-        print(f"Processed {len(all_mentioned_names)} mentions in batches of {batch_size}")
+    result = analyze_sentiment(news_article, [m['mentioned_name'] for m in stock_mentions], [m['stock_company'] for m in stock_mentions])
+    if result:
+        print(f"Created {result} stock events for article: {news_article.id}")
     else:
-        print(f"No stock mentions detected for article: {article_url}. Skipping event detection.")
-
-    print(f"Successfully processed article: {article_url}. Updated with {len(stock_mentions)} mentions and created {len(created_events)} events.")
-    return news_article, created_events
+        print("No stock events created")
+    return news_article, result

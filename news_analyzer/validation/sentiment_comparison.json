@@ -1,0 +1,675 @@
+[
+    {
+        "title": "RADIUS RECYCLING INC (NASDAQ:RDUS) is showing promising signs of setting up for a breakout.",
+        "symbols": [
+            "NASDAQ:RDUS"
+        ],
+        "eodhd_sentiment": "VP",
+        "eodhd_sentiment_data": {
+            "polarity": 0.994,
+            "neg": 0.02,
+            "neu": 0.882,
+            "pos": 0.099
+        },
+        "deepseek_sentiment": {
+            "sentiment": "P",
+            "importance": "IMPORTANT",
+            "company_name": "RADIUS RECYCLING INC",
+            "description": "RADIUS RECYCLING INC (NASDAQ:RDUS) shows strong technical indicators, including a high technical rating and potential breakout setup, outperforming most peers in the metals & mining industry.",
+            "reasons": [
+                "Reason 1: The article highlights a 'Technical Breakout Setup Pattern,' suggesting potential upward momentum.",
+                "Reason 2: RDUS has a high technical rating of 9/10, with positive long and short-term trends.",
+                "Reason 3: The stock is outperforming 96% of its industry peers and recently hit a 52-week high.",
+                "Reason 4: The setup rating of 8 indicates favorable consolidation, reducing volatility and signaling a possible breakout."
+            ],
+            "match": false
+        },
+        "gemini_sentiment": {
+            "sentiment": "SP",
+            "importance": "REGULAR",
+            "company_name": "NASDAQ:RDUS",
+            "description": "RADIUS RECYCLING INC (NASDAQ:RDUS) is exhibiting a technical breakout setup pattern with strong technical ratings and is outperforming its industry peers, suggesting a potential upward trend.",
+            "reasons": [
+                "The article identifies RDUS as a \"Technical Breakout Setup Pattern.\"",
+                "RDUS receives a high technical rating of 9 out of 10.",
+                "Both long and short-term trends for RDUS are described as positive.",
+                "RDUS is outperforming 96% of its industry peers.",
+                "RDUS is making a new 52-week high.",
+                "The article notes a decent setup pattern with reduced volatility.",
+                "The article mentions that a breakout could materialize when the stock breaks out to new highs."
+            ],
+            "match": false
+        },
+        "llama4_sentiment": {
+            "sentiment": "SP",
+            "importance": "REGULAR",
+            "company_name": "RADIUS RECYCLING INC (NASDAQ:RDUS)",
+            "description": "RADIUS RECYCLING INC (NASDAQ:RDUS) shows a Technical Breakout Setup Pattern, with a high technical rating of 9/10 and a decent setup rating of 8/10, indicating potential for a breakout.",
+            "reasons": [
+                "The stock has a high technical rating of 9 out of 10, indicating strong performance.",
+                "RDUS is outperforming 96% of its industry peers in the METALS & MINING sector.",
+                "The stock is making a new 52-week high, a strong signal.",
+                "The stock has been consolidating in a tight range, showing reduced volatility.",
+                "A breakout above the current consolidation zone could lead to further price increase."
+            ],
+            "match": false
+        },
+        "gpt4_mini_sentiment": {
+            "sentiment": "P",
+            "importance": "IMPORTANT",
+            "company_name": "RADIUS RECYCLING INC",
+            "description": "RADIUS RECYCLING INC (NASDAQ:RDUS) is showing strong technical indicators, suggesting a potential breakout after recent consolidation.",
+            "reasons": [
+                "RDUS has a technical rating of 9 out of 10, indicating strong performance.",
+                "The company is outperforming 96% of its peers in the METALS & MINING industry.",
+                "RDUS is making a new 52-week high, a strong bullish signal.",
+                "The stock is currently in a consolidation phase, which can precede further upward movement."
+            ],
+            "match": false
+        }
+    },
+    {
+        "title": "Interesting Technical Analysis finding for COSTCO WHOLESALE CORP (NASDAQ:COST)",
+        "symbols": [
+            "NASDAQ:COST"
+        ],
+        "eodhd_sentiment": "VP",
+        "eodhd_sentiment_data": {
+            "polarity": 0.96,
+            "neg": 0.011,
+            "neu": 0.93,
+            "pos": 0.059
+        },
+        "deepseek_sentiment": {
+            "sentiment": "P",
+            "importance": "REGULAR",
+            "company_name": "NASDAQ:COST",
+            "description": "COSTCO WHOLESALE CORP (NASDAQ:COST) is flagged as a potential breakout candidate with strong technical ratings and consistent performance.",
+            "reasons": [
+                "Reason 1: Overall technical rating of 9 out of 10, indicating strong performance.",
+                "Reason 2: Both short-term and long-term trends are positive, a very positive sign.",
+                "Reason 3: Outperforms 90% of all stocks in yearly performance and shows a consistent pattern of rising prices.",
+                "Reason 4: Currently trading near the high of its recent range, suggesting upward momentum.",
+                "Reason 5: Setup rating of 8, indicating a decent consolidation pattern and potential for a breakout."
+            ],
+            "match": false
+        },
+        "gemini_sentiment": {
+            "sentiment": "SP",
+            "importance": "REGULAR",
+            "company_name": "NASDAQ:COST",
+            "description": "Costco (NASDAQ:COST) is flagged as a potential breakout candidate with a strong technical rating of 9/10, indicating positive short and long-term trends and outperforming the market and most of its industry peers. The stock is consolidating, presenting a possible entry point for traders.",
+            "reasons": [
+                "Reason 1: The article highlights a strong technical rating (9/10) for Costco, indicating positive performance.",
+                "Reason 2: Both short-term and long-term trends for Costco are described as positive.",
+                "Reason 3: Costco is outperforming a significant portion of the market and its industry peers.",
+                "Reason 4: The article mentions a potential breakout opportunity, which suggests possible upward movement."
+            ],
+            "match": false
+        },
+        "llama4_sentiment": {
+            "sentiment": "SP",
+            "importance": "REGULAR",
+            "company_name": "COSTCO WHOLESALE CORP",
+            "description": "COSTCO WHOLESALE CORP (NASDAQ:COST) shows a high technical rating of 9/10 due to its consistent positive performance in both short and long term trends, outperforming 90% of all stocks and 64% of its industry peers.",
+            "reasons": [
+                "The stock has a high technical rating of 9 out of 10, indicating strong performance.",
+                "Both short term and long term trends are positive, which is a very positive sign.",
+                "COSTCO WHOLESALE CORP is outperforming 90% of all stocks and 64% of its industry peers.",
+                "The stock is currently consolidating and showing reduced volatility, which may present a buying opportunity.",
+                "The analysis is based on technical indicators and does not guarantee trading outcomes, making it less critical."
+            ],
+            "match": false
+        },
+        "gpt4_mini_sentiment": {
+            "sentiment": "P",
+            "importance": "IMPORTANT",
+            "company_name": "COSTCO WHOLESALE CORP",
+            "description": "COSTCO WHOLESALE CORP (NASDAQ:COST) identified as a potential breakout candidate with a strong technical rating of 9 out of 10, indicating positive short and long-term trends.",
+            "reasons": [
+                "COST has a technical rating of 9 out of 10, showing strong performance.",
+                "The stock is outperforming 90% of other stocks in the market.",
+                "Current price consolidation presents a potential entry opportunity for traders.",
+                "Both short-term and long-term trends for COST are positive."
+            ],
+            "match": false
+        }
+    },
+    {
+        "title": "Should Quality-Oriented Investors Explore DIGI INTERNATIONAL INC (NASDAQ:DGII)?",
+        "symbols": [
+            "NASDAQ:DGII"
+        ],
+        "eodhd_sentiment": "VP",
+        "eodhd_sentiment_data": {
+            "polarity": 0.999,
+            "neg": 0.015,
+            "neu": 0.727,
+            "pos": 0.258
+        },
+        "deepseek_sentiment": {
+            "sentiment": "P",
+            "importance": "regular",
+            "company_name": "DIGI International Inc",
+            "description": "DIGI International Inc (NASDAQ: DGII) shows strong financial performance and growth potential, making it an attractive option for quality-oriented investors.",
+            "reasons": [
+                "Strong revenue growth over the past 5 years (10.78% increase) indicates consistent performance.",
+                "High ROIC (42.63%) reflects strong financial management and profitability.",
+                "Favorable debt-to-free cash flow ratio (1.01) demonstrates sound financial discipline.",
+                "Consistent profit quality (322.0% over 5 years) highlights reliable earnings generation.",
+                "EBIT growth (36.9% over 5 years) outpaces revenue growth, showing efficient cost management."
+            ],
+            "match": false
+        },
+        "gemini_sentiment": {
+            "sentiment": "P",
+            "importance": "IMPORTANT",
+            "company_name": "NASDAQ:DGII",
+            "description": "DIGI INTERNATIONAL INC (NASDAQ:DGII) is highlighted as a potentially attractive quality investment due to strong revenue and EBIT growth, high ROIC, sound financial discipline, and reliable profit generation, earning a fundamental rating of 6 out of 10.",
+            "reasons": [
+                "Reason 1: The article highlights strong performance in revenue and EBIT growth, which are positive indicators.",
+                "Reason 2: High ROIC (42.63%) indicates strong financial management and profitability.",
+                "Reason 3: Favorable Debt/Free Cash Flow Ratio of 1.04 demonstrates sound financial discipline.",
+                "Reason 4: High Profit Quality (322.0%) highlights the ability to consistently generate reliable profits.",
+                "Reason 5: The fundamental rating of 6 out of 10, while not perfect, is still a positive signal."
+            ],
+            "match": false
+        },
+        "llama4_sentiment": {
+            "sentiment": "VP",
+            "importance": "IMPORTANT",
+            "company_name": "Digi International Inc (NASDAQ:DGII)",
+            "description": "Digi International Inc (NASDAQ:DGII) shows strong revenue growth, financial management, and profitability, making it a potential candidate for quality investors.",
+            "reasons": [
+                "DGII has shown a 10.78% revenue growth over the past 5 years, indicating its ability to generate consistent revenue.",
+                "The company's ROIC excluding cash and goodwill is 42.63%, reflecting strong financial management and profitability.",
+                "DGII has a favorable Debt/Free Cash Flow Ratio of 1.04, showcasing sound financial discipline and cash flow management.",
+                "The Profit Quality (5-year) of DGII is 322.0%, highlighting its ability to consistently generate reliable profits.",
+                "DGII achieved a 36.9% EBIT growth over the past 5 years, underscoring effective management of operating income.",
+                "The company's EBIT 5-year growth outpacing its Revenue 5-year growth suggests effective cost management and enhanced operational performance."
+            ],
+            "match": true
+        },
+        "gpt4_mini_sentiment": {
+            "sentiment": "VP",
+            "importance": "IMPORTANT",
+            "company_name": "DIGI INTERNATIONAL INC",
+            "description": "DIGI INTERNATIONAL INC (NASDAQ:DGII) demonstrates strong financial metrics, including significant revenue and EBIT growth, making it an appealing option for quality investors.",
+            "reasons": [
+                "Strong revenue growth of 10.78% over the past 5 years indicates solid performance.",
+                "High ROIC of 42.63% reflects effective financial management and profitability.",
+                "Favorable Debt/Free Cash Flow Ratio of 1.04 showcases sound financial discipline.",
+                "Profit Quality of 322.0% highlights DGII's reliability in generating profits.",
+                "Strong EBIT growth of 36.9% suggests effective management and positive future profitability.",
+                "Overall positive fundamental rating of 6 out of 10 compared to industry peers."
+            ],
+            "match": true
+        }
+    },
+    {
+        "title": "Is TELKOM INDONESIA PERSERO-ADR (NYSE:TLK) suited for dividend investing?",
+        "symbols": [
+            "NYSE:TLK"
+        ],
+        "eodhd_sentiment": "VP",
+        "eodhd_sentiment_data": {
+            "polarity": 0.997,
+            "neg": 0.03,
+            "neu": 0.826,
+            "pos": 0.144
+        },
+        "deepseek_sentiment": {
+            "sentiment": "P",
+            "importance": "regular",
+            "company_name": "TELKOM INDONESIA PERSERO-ADR",
+            "description": "TELKOM INDONESIA (NYSE: TLK) shows strong dividend and financial health metrics, making it attractive for dividend investors.",
+            "reasons": [
+                "Reason 1: High dividend yield (6.79%) and strong historical dividend performance.",
+                "Reason 2: Excellent financial health with low debt and strong solvency ratios (e.g., Altman-Z score of 2.51).",
+                "Reason 3: High profitability metrics (e.g., ROA, ROE, and profit margins) compared to industry peers."
+            ],
+            "match": false
+        },
+        "gemini_sentiment": {
+            "sentiment": "P",
+            "importance": "IMPORTANT",
+            "company_name": "NYSE:TLK",
+            "description": "TELKOM INDONESIA PERSERO-ADR (NYSE:TLK) is highlighted as a potentially strong dividend stock due to its high dividend yield, solid financial health, and strong profitability metrics compared to its industry peers.",
+            "reasons": [
+                "The article highlights TLK's strong dividend yield, exceeding industry and S&P 500 averages.",
+                "TLK has a proven track record of paying dividends for at least 10 years.",
+                "The company's earnings are growing faster than its dividends, suggesting sustainability.",
+                "TLK demonstrates strong financial health with a high Altman-Z score and a low debt-to-FCF ratio.",
+                "The company exhibits robust profitability with high return on assets, equity, and invested capital, outperforming most of its industry peers."
+            ],
+            "match": false
+        },
+        "llama4_sentiment": {
+            "sentiment": "VP",
+            "importance": "IMPORTANT",
+            "company_name": "TELKOM INDONESIA PERSERO-ADR (NYSE:TLK)",
+            "description": "TELKOM INDONESIA PERSERO-ADR (NYSE:TLK) is a strong candidate for dividend investing with a 6.79% yearly dividend yield, a reliable 10-year dividend track record, and strong profitability and solvency metrics.",
+            "reasons": [
+                "TLK has a high dividend yield of 6.79%, outperforming 87.10% of its industry peers and the S&P500 average.",
+                "The company has a reliable dividend track record of at least 10 years and its earnings are growing more than its dividend, making dividend growth sustainable.",
+                "TLK scores well on profitability with an 8 out of 10 profitability rating, driven by strong return on assets, equity, and invested capital, as well as high profit margins.",
+                "The company's health rating is 6 out of 10, indicating good solvency and liquidity, with a strong Altman-Z score and favorable debt to FCF and debt to equity ratios."
+            ],
+            "match": true
+        },
+        "gpt4_mini_sentiment": {
+            "sentiment": "P",
+            "importance": "IMPORTANT",
+            "company_name": "TELKOM INDONESIA PERSERO-ADR",
+            "description": "TELKOM INDONESIA PERSERO-ADR (NYSE:TLK) identified as a strong candidate for dividend investing with a 6.79% yield and solid profitability metrics.",
+            "reasons": [
+                "The article highlights TLK's high dividend yield of 6.79%, which is significantly above the industry average.",
+                "TLK has a reliable track record of paying dividends for over 10 years, indicating stability.",
+                "The company's profitability metrics, including return on assets and profit margins, outperform the majority of its industry peers."
+            ],
+            "match": false
+        }
+    },
+    {
+        "title": "Don't overlook EURONET WORLDWIDE INC (NASDAQ:EEFT)—it's a hidden gem with strong fundamentals and an attractive price tag.",
+        "symbols": [
+            "NASDAQ:EEFT"
+        ],
+        "eodhd_sentiment": "VP",
+        "eodhd_sentiment_data": {
+            "polarity": 0.996,
+            "neg": 0.012,
+            "neu": 0.861,
+            "pos": 0.127
+        },
+        "deepseek_sentiment": {
+            "sentiment": "P",
+            "importance": "IMPORTANT",
+            "company_name": "EURONET WORLDWIDE INC",
+            "description": "EURONET WORLDWIDE INC (NASDAQ:EEFT) is highlighted as an undervalued stock with strong fundamentals, attractive valuation, and solid growth prospects.",
+            "reasons": [
+                "Reason 1: The article emphasizes EEFT's attractive valuation metrics, including low P/E and P/FCF ratios compared to industry and S&P500 averages.",
+                "Reason 2: EEFT demonstrates strong profitability with high ROA, ROE, and ROIC, outperforming most industry peers.",
+                "Reason 3: The company shows positive growth trends in EPS and revenue, with accelerating growth expected in the coming years.",
+                "Reason 4: EEFT's health metrics, such as Altman-Z score and debt ratios, indicate financial stability and outperformance relative to peers."
+            ],
+            "match": false
+        },
+        "gemini_sentiment": {
+            "sentiment": "VP",
+            "importance": "IMPORTANT",
+            "company_name": "NASDAQ:EEFT",
+            "description": "Euronet Worldwide (NASDAQ:EEFT) is highlighted as an undervalued stock with strong fundamentals, including a decent valuation, profitability, health, and growth prospects, making it a potentially attractive investment.",
+            "reasons": [
+                "The article explicitly calls EEFT a \"hidden gem with strong fundamentals and an attractive price tag.\"",
+                "EEFT receives high valuation ratings, indicating it's undervalued based on multiple metrics like P/E, forward P/E, and EV/EBITDA.",
+                "The company demonstrates strong profitability, outperforming most industry peers in Return on Assets, Equity, and Invested Capital.",
+                "EEFT shows decent health ratings based on Altman-Z score and debt to FCF ratio.",
+                "The company exhibits strong growth in EPS and revenue, with projected future earnings growth.",
+                "The article uses overwhelmingly positive language, such as \"decent valuation,\" \"significant indicator of profitability,\" and \"strong growth.\""
+            ],
+            "match": true
+        },
+        "llama4_sentiment": {
+            "sentiment": "VP",
+            "importance": "IMPORTANT",
+            "company_name": "EURONET WORLDWIDE INC (NASDAQ:EEFT)",
+            "description": "EURONET WORLDWIDE INC (NASDAQ:EEFT) is considered undervalued with strong fundamentals, including health, profitability, and growth prospects, making it an attractive investment opportunity.",
+            "reasons": [
+                "The stock has a high valuation rating of 8 out of 10, indicating it is attractively priced with a low price-to-earnings ratio compared to its industry and the S&P 500.",
+                "EEFT demonstrates strong profitability with a rating of 6 out of 10, outperforming a significant percentage of its industry peers in return on assets, equity, and invested capital.",
+                "The company's health rating is 6 out of 10, showing good liquidity and solvency ratios, such as a decent Altman-Z score and debt to free cash flow ratio.",
+                "EEFT has a growth rating of 5 out of 10, with strong historical and expected earnings per share growth, indicating positive future prospects."
+            ],
+            "match": true
+        },
+        "gpt4_mini_sentiment": {
+            "sentiment": "VP",
+            "importance": "CRITICAL",
+            "company_name": "NASDAQ:EEFT",
+            "description": "EURONET WORLDWIDE INC (NASDAQ:EEFT) is highlighted as an undervalued stock with strong fundamentals and significant growth potential.",
+            "reasons": [
+                "EEFT demonstrates solid fundamentals, indicating a strong financial health and profitability.",
+                "The stock is considered undervalued with a favorable Price/Earnings ratio compared to industry peers.",
+                "EEFT has strong profitability metrics, outperforming a significant percentage of its industry peers.",
+                "Projected earnings growth of 14.22% per year suggests robust future performance.",
+                "High scores in valuation, profitability, and health ratings indicate a strong investment opportunity."
+            ],
+            "match": true
+        }
+    },
+    {
+        "title": "Does AEVA TECHNOLOGIES INC (NASDAQ:AEVA) meet the Minervini criteria?",
+        "symbols": [
+            "NASDAQ:AEVA"
+        ],
+        "eodhd_sentiment": "VP",
+        "eodhd_sentiment_data": {
+            "polarity": 1,
+            "neg": 0.006,
+            "neu": 0.695,
+            "pos": 0.299
+        },
+        "deepseek_sentiment": {
+            "sentiment": "P",
+            "importance": "IMPORTANT",
+            "company_name": "AEVA TECHNOLOGIES INC",
+            "description": "AEVA Technologies Inc (NASDAQ:AEVA) meets Minervini growth criteria, showing strong technical and financial momentum with accelerating EPS and revenue growth.",
+            "reasons": [
+                "Reason 1: AEVA passes all Minervini Trend Template checks, indicating a strong uptrend.",
+                "Reason 2: Significant quarter-to-quarter EPS growth (45.56%) and revenue growth (67.35%) highlight improving profitability and market capture.",
+                "Reason 3: Consistent EPS estimate beats and positive earnings surprises reflect strong financial performance.",
+                "Reason 4: High Relative Strength (98.59) suggests outperformance against the broader market.",
+                "Reason 5: Debt-free balance sheet (Debt/Equity ratio of 0.0) demonstrates prudent financial management."
+            ],
+            "match": false
+        },
+        "gemini_sentiment": {
+            "sentiment": "P",
+            "importance": "IMPORTANT",
+            "company_name": "NASDAQ:AEVA",
+            "description": "AEVA Technologies (NASDAQ:AEVA) is highlighted as a potential growth stock, meeting the Minervini criteria for strong uptrends and showing positive earnings and revenue growth, suggesting a favorable financial trajectory.",
+            "reasons": [
+                "Reason 1: The article explicitly states that AEVA meets the Minervini criteria, which is a positive signal for growth stocks.",
+                "Reason 2: The article highlights positive EPS and revenue growth, including accelerating EPS growth and strong revenue momentum.",
+                "Reason 3: AEVA has surpassed EPS estimates in the last 4 quarters, indicating strong financial performance.",
+                "Reason 4: The company has a strong relative strength rating, indicating outperformance of the broader market.",
+                "Reason 5: The article mentions positive growth in operating margin and a low Debt/Equity ratio, reflecting improved profitability and prudent financial management."
+            ],
+            "match": false
+        },
+        "llama4_sentiment": {
+            "sentiment": "VP",
+            "importance": "IMPORTANT",
+            "company_name": "AEVA TECHNOLOGIES INC (NASDAQ:AEVA)",
+            "description": "AEVA TECHNOLOGIES INC meets the Minervini criteria for growth investing, showing strong uptrend and growth potential with positive earnings momentum and revenue growth.",
+            "reasons": [
+                "AEVA passes the Minervini Trend Template check, indicating a strong uptrend.",
+                "The company shows positive earnings per share (EPS) growth and acceleration.",
+                "AEVA has demonstrated significant quarter-to-quarter and 1-year revenue growth.",
+                "The company has consistently surpassed EPS estimates, reflecting strong financial performance.",
+                "AEVA has a Debt/Equity ratio of 0.0, indicating prudent financial management.",
+                "The stock exhibits strong Relative Strength, outperforming the broader market."
+            ],
+            "match": true
+        },
+        "gpt4_mini_sentiment": {
+            "sentiment": "VP",
+            "importance": "CRITICAL",
+            "company_name": "AEVA TECHNOLOGIES INC",
+            "description": "AEVA TECHNOLOGIES INC shows strong growth potential, meeting the Minervini criteria with significant EPS and revenue growth.",
+            "reasons": [
+                "AEVA passes the Minervini Trend Template, indicating strong uptrends.",
+                "EPS growth of 45.56% quarter-to-quarter signifies improving profitability.",
+                "Revenue growth of 110.0% over the past year showcases the company's market expansion capabilities.",
+                "Strong Relative Strength rating of 98.59 indicates outperformance against the broader market.",
+                "Positive financial trajectory with consistent earnings surprises and effective management."
+            ],
+            "match": true
+        }
+    },
+    {
+        "title": "Is CATALYST PHARMACEUTICALS INC (NASDAQ:CPRX) on the Verge of a Major Breakout as a Strong Growth Stock?",
+        "symbols": [
+            "NASDAQ:CPRX"
+        ],
+        "eodhd_sentiment": "VP",
+        "eodhd_sentiment_data": {
+            "polarity": 1,
+            "neg": 0.036,
+            "neu": 0.727,
+            "pos": 0.237
+        },
+        "deepseek_sentiment": {
+            "sentiment": "VP",
+            "importance": "IMPORTANT",
+            "company_name": "CATALYST PHARMACEUTICALS INC",
+            "description": "CATALYST PHARMACEUTICALS INC (NASDAQ:CPRX) shows strong growth potential with impressive EPS and revenue growth, robust financial health, and high profitability ratings.",
+            "reasons": [
+                "Reason 1: CPRX has a high GROWTH RATING of 9, with impressive EPS growth (61.73% YoY) and revenue growth (23.47% YoY).",
+                "Reason 2: The company's HEALTH RATING is 8, indicating strong financial health, no outstanding debt, and excellent liquidity ratios.",
+                "Reason 3: CPRX boasts a PROFITABILITY RATING of 9, with outstanding metrics like RETURN ON ASSETS (19.25%) and OPERATING MARGIN (39.68%).",
+                "Reason 4: Technical analysis suggests a potential breakout with a SETUP RATING of 7 and minimal resistance above the current price."
+            ],
+            "match": true
+        },
+        "gemini_sentiment": {
+            "sentiment": "VP",
+            "importance": "IMPORTANT",
+            "company_name": "NASDAQ:CPRX",
+            "description": "Catalyst Pharmaceuticals (NASDAQ:CPRX) is highlighted as a strong growth stock with a potential breakout, boasting high scores in growth, health, and profitability based on ChartMill's ratings, indicating impressive EPS and revenue growth, financial stability, and strong profitability metrics.",
+            "reasons": [
+                "Reason 1: The article consistently uses positive language like 'strong growth,' 'impressive,' 'excellent,' and 'best of the industry' when describing CPRX's performance.",
+                "Reason 2: CPRX receives high ratings in growth (9/10), health (8/10), and profitability (9/10), indicating strong financial fundamentals.",
+                "Reason 3: The article explicitly mentions that CPRX is financially healthy with little bankruptcy risk, supported by a high Altman-Z score and no outstanding debt.",
+                "Reason 4: The article notes significant growth in EPS and revenue, both historically and projected for the future.",
+                "Reason 5: Profitability metrics such as ROA, ROE, and profit margins are consistently ranked among the best in the industry."
+            ],
+            "match": true
+        },
+        "llama4_sentiment": {
+            "sentiment": "VP",
+            "importance": "IMPORTANT",
+            "company_name": "CATALYST PHARMACEUTICALS INC (NASDAQ:CPRX)",
+            "description": "CATALYST PHARMACEUTICALS INC (NASDAQ:CPRX) shows strong growth in EPS and revenue, excellent financial health, and high profitability, indicating a potential breakout.",
+            "reasons": [
+                "CPRX has a high growth rating of 9 out of 10 due to strong EPS and revenue growth.",
+                "The company has excellent financial health with an Altman-Z score of 16.22 and no outstanding debt.",
+                "CPRX demonstrates high profitability with a return on assets of 19.25% and return on equity of 22.52%.",
+                "The stock is consolidating and has a decent setup pattern with little resistance above the current price."
+            ],
+            "match": true
+        },
+        "gpt4_mini_sentiment": {
+            "sentiment": "VP",
+            "importance": "CRITICAL",
+            "company_name": "CATALYST PHARMACEUTICALS INC",
+            "description": "CATALYST PHARMACEUTICALS INC (NASDAQ:CPRX) shows strong growth indicators with high EPS and revenue growth, suggesting a potential breakout.",
+            "reasons": [
+                "CPRX has demonstrated impressive EPS growth of 61.73% over the last year.",
+                "The company has a solid revenue growth of 23.47% in the past year and an average of 36.89% yearly over previous years.",
+                "CPRX has received high ratings for growth (9), health (8), and profitability (9), indicating overall strong financial health.",
+                "The article suggests a potential breakout, which is critical for growth investors.",
+                "No outstanding debt and high liquidity ratios further enhance CPRX's financial position."
+            ],
+            "match": true
+        }
+    },
+    {
+        "title": "SlimJaro Reviews: Scrutinize Report Ozemburn Max with Pink Salt Trick For Ozempic Weight Loss Recipe",
+        "symbols": [],
+        "eodhd_sentiment": "VP",
+        "eodhd_sentiment_data": {
+            "polarity": 1,
+            "neg": 0.075,
+            "neu": 0.691,
+            "pos": 0.235
+        },
+        "deepseek_sentiment": {
+            "sentiment": "VP",
+            "importance": "REGULAR",
+            "company_name": "SlimJaro",
+            "description": "SlimJaro is a natural weight loss supplement that claims to boost metabolism, suppress appetite, and improve energy levels using ingredients like Garcinia Cambogia and green tea extract.",
+            "reasons": [
+                "Highly promotional language with no negative aspects mentioned.",
+                "Emphasizes 'scientifically backed' and 'life-changing' results.",
+                "Includes numerous customer testimonials and expert endorsements.",
+                "Targets a broad audience but is a dietary supplement, not a major pharmaceutical product."
+            ],
+            "match": true
+        },
+        "gemini_sentiment": {
+            "sentiment": "VP",
+            "importance": "IMPORTANT",
+            "company_name": "SlimJaro",
+            "description": "SlimJaro is gaining popularity as a weight loss supplement due to its natural ingredients, visible results, and holistic approach to weight management, according to a press release.",
+            "reasons": [
+                "Reason 1: The article consistently praises SlimJaro's effectiveness in weight loss.",
+                "Reason 2: The article highlights the product's safety and natural ingredients.",
+                "Reason 3: The article provides numerous customer testimonials reporting positive results.",
+                "Reason 4: The article emphasizes the product's holistic approach, addressing various aspects of weight management.",
+                "Reason 5: The article includes expert opinions endorsing SlimJaro from nutritionists, fitness trainers, and doctors."
+            ],
+            "match": true
+        },
+        "llama4_sentiment": {
+            "sentiment": "N",
+            "importance": "REGULAR",
+            "company_name": "SlimJaro",
+            "description": "The article is a promotional piece for SlimJaro, a weight loss supplement, detailing its ingredients, benefits, usage instructions, and customer testimonials, with no direct financial news or critical information about the company's prospects.",
+            "reasons": [
+                "The article is primarily an advertisement for SlimJaro, focusing on its features and benefits.",
+                "It does not contain any financial data or critical news that would impact the company's stock or prospects.",
+                "The tone is promotional rather than analytical or critical.",
+                "The article includes customer testimonials and detailed descriptions of the product's ingredients and how it works."
+            ],
+            "match": false
+        },
+        "gpt4_mini_sentiment": {
+            "sentiment": "VP",
+            "importance": "CRITICAL",
+            "company_name": "SlimJaro",
+            "description": "SlimJaro's innovative weight loss formula gains global acclaim for its natural ingredients and effective results.",
+            "reasons": [
+                "The article highlights SlimJaro as a scientifically-backed, effective weight loss solution, which is likely to attract more customers.",
+                "It emphasizes the product's focus on safety, sustainability, and holistic health, aligning with consumer preferences for natural products.",
+                "Numerous testimonials showcase significant weight loss results and improved well-being, reinforcing the product's credibility and market potential.",
+                "The article positions SlimJaro as a leader in a crowded market, differentiating it from traditional diet pills and fad diets."
+            ],
+            "match": true
+        }
+    },
+    {
+        "title": "Would Peter Lynch consider ULTA BEAUTY INC (NASDAQ:ULTA) a winning stock?",
+        "symbols": [
+            "NASDAQ:ULTA",
+            "ULTA.US"
+        ],
+        "eodhd_sentiment": "VP",
+        "eodhd_sentiment_data": {
+            "polarity": 0.981,
+            "neg": 0.025,
+            "neu": 0.849,
+            "pos": 0.126
+        },
+        "deepseek_sentiment": {
+            "sentiment": "P",
+            "importance": "regular",
+            "company_name": "NASDAQ:ULTA",
+            "description": "ULTA Beauty shows strong financial health and growth potential, meeting key investment criteria for long-term sustainability.",
+            "reasons": [
+                "High ROE (48.27%) indicates strong profitability and effective asset management.",
+                "Zero debt-to-equity ratio reflects financial stability and disciplined capital structure.",
+                "Consistent EPS growth over 5 years demonstrates increasing earnings potential.",
+                "Attractive PEG ratio (0.95) suggests balanced valuation relative to growth prospects.",
+                "Solid fundamental rating (6/10) with strong health and profitability in the retail sector."
+            ],
+            "match": false
+        },
+        "gemini_sentiment": {
+            "sentiment": "P",
+            "importance": "IMPORTANT",
+            "company_name": "NASDAQ:ULTA",
+            "description": "An analysis of ULTA Beauty (NASDAQ:ULTA) suggests the company possesses qualities Peter Lynch sought in winning stocks, including strong ROE, low debt, consistent EPS growth, and an attractive PEG ratio, earning a fundamental rating of 6/10.",
+            "reasons": [
+                "The article highlights favorable metrics like ROE, debt-to-equity ratio, EPS growth, and PEG ratio.",
+                "The article uses positive language like \"attractive returns\", \"effective management\", \"financial stability\", and \"long-term sustainability\".",
+                "The fundamental rating of 6/10, with outstanding health and profitability ratings, is positive.",
+                "The comparison to industry peers is favorable, indicating ULTA is among the best in its industry."
+            ],
+            "match": false
+        },
+        "llama4_sentiment": {
+            "sentiment": "P",
+            "importance": "IMPORTANT",
+            "company_name": "NASDAQ:ULTA",
+            "description": "ULTA Beauty Inc. (NASDAQ:ULTA) meets key criteria for a winning stock according to Peter Lynch's investment philosophy, with consistent earnings growth, low debt, and a competitive edge.",
+            "reasons": [
+                "ULTA demonstrates a favorable Return on Equity (ROE) of 48.27%, indicating effective management and profitability.",
+                "The company has a Debt-to-Equity ratio of 0.0, showcasing disciplined capital structure and financial stability.",
+                "ULTA has shown consistent EPS growth over a 5-year period, highlighting its ability to generate increasing earnings.",
+                "A PEG ratio of 0.95 suggests an attractive balance between growth and valuation.",
+                "The Current Ratio of 1.7 indicates ULTA's ability to sustain day-to-day operations without liquidity concerns.",
+                "ULTA scores 6 out of 10 in the fundamental rating, with outstanding health and profitability ratings compared to industry peers."
+            ],
+            "match": false
+        },
+        "gpt4_mini_sentiment": {
+            "sentiment": "VP",
+            "importance": "CRITICAL",
+            "company_name": "NASDAQ:ULTA",
+            "description": "ULTA Beauty Inc demonstrates strong financial health with consistent earnings growth and low debt, making it a favorable stock according to Peter Lynch's investment philosophy.",
+            "reasons": [
+                "ULTA has a high Return on Equity (ROE) of 48.27%, indicating effective asset management and profitability.",
+                "The company's Debt-to-Equity ratio is 0.0, showcasing financial stability and low debt.",
+                "Consistent growth in EPS over the past 5 years reflects ULTA's ability to generate increasing earnings.",
+                "A PEG ratio of 0.95 suggests an attractive balance between growth and valuation.",
+                "With a Current Ratio of 1.7, ULTA can sustain its day-to-day operations without liquidity concerns.",
+                "ULTA scores 6 out of 10 in fundamental ratings, ranking among the best in the specialty retail industry."
+            ],
+            "match": true
+        }
+    },
+    {
+        "title": "LNW Investor News: If You Have Suffered Losses in Light &amp; Wonder, Inc. (NASDAQ: LNW), You Are Encouraged to Contact The Rosen Law Firm About Your Rights",
+        "symbols": [
+            "LNW.US"
+        ],
+        "eodhd_sentiment": "VP",
+        "eodhd_sentiment_data": {
+            "polarity": 0.986,
+            "neg": 0.039,
+            "neu": 0.85,
+            "pos": 0.111
+        },
+        "deepseek_sentiment": {
+            "sentiment": "NG",
+            "importance": "important",
+            "company_name": "Light &amp; Wonder, Inc.",
+            "description": "Light &amp; Wonder (LNW) faces potential legal action and investor losses due to alleged misleading business disclosures and a recent court ruling against it.",
+            "reasons": [
+                "Reason 1: The article highlights a pending class action lawsuit against Light &amp; Wonder for alleged misleading business disclosures, which could lead to financial penalties and reputational damage.",
+                "Reason 2: A court ruling has already negatively impacted LNW's stock price, with a 19.49% drop following the legal setback related to intellectual property disputes.",
+                "Reason 3: The legal action and investor concerns suggest potential financial and operational risks for the company, warranting a negative sentiment."
+            ],
+            "match": false
+        },
+        "gemini_sentiment": {
+            "sentiment": "VN",
+            "importance": "IMPORTANT",
+            "company_name": "LNW.US",
+            "description": "Rosen Law Firm is investigating Light & Wonder (LNW.US) for potential securities claims after allegations of misleading business information led to a significant stock drop following news of a legal loss to Aristocrat Technologies regarding intellectual property infringement of their Dragon Train game. Investors who suffered losses are encouraged to contact the firm.",
+            "reasons": [
+                "Reason 1: The article discusses an investigation into potential securities claims against Light & Wonder.",
+                "Reason 2: The investigation stems from allegations of materially misleading business information.",
+                "Reason 3: The article mentions a significant stock drop of 19.49% following the news of a legal loss.",
+                "Reason 4: The terms 'losses', 'misleading', 'infringement', and 'class action' all indicate negative sentiment according to Loughran-McDonald."
+            ],
+            "match": false
+        },
+        "llama4_sentiment": {
+            "sentiment": "NG",
+            "importance": "IMPORTANT",
+            "company_name": "LNW.US",
+            "description": "The Rosen Law Firm is investigating potential securities claims against Light & Wonder, Inc. (LNW.US) due to allegations of issuing materially misleading business information, potentially entitling shareholders to compensation.",
+            "reasons": [
+                "The article mentions an investigation into Light & Wonder for potentially issuing misleading business information, which is negative for the company's reputation and potentially its stock price.",
+                "A court granted a preliminary injunction against Light & Wonder in a trade-secret and copyright infringement lawsuit, which resulted in a 19.49% drop in the company's common stock on September 24, 2024.",
+                "The Rosen Law Firm is preparing a class action seeking recovery of investor losses, indicating potential significant financial implications for Light & Wonder."
+            ],
+            "match": false
+        },
+        "gpt4_mini_sentiment": {
+            "sentiment": "VN",
+            "importance": "CRITICAL",
+            "company_name": "Light & Wonder, Inc.",
+            "description": "Light & Wonder, Inc. (NASDAQ: LNW) faces potential class action due to misleading business information, raising serious concerns about its securities.",
+            "reasons": [
+                "The article discusses ongoing investigations into Light & Wonder for allegedly issuing misleading business information.",
+                "The potential class action lawsuit indicates significant investor losses and legal challenges.",
+                "Past stock performance shows a dramatic decline of 19.49% following negative news, highlighting investor concerns."
+            ],
+            "match": false
+        }
+    }
+]

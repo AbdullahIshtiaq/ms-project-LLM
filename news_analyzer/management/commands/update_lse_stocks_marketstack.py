@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from news_analyzer.fetch_lse_stocks_marketstack import update_lse_stocks
+from news_analyzer.fetch_lse_stocks import update_lse_stocks
 import os
 from django.conf import settings
 

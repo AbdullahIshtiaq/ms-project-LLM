@@ -1,0 +1,562 @@
+{% extends 'base.html' %}
+{% load math_filters %}
+
+{% block title %}Validation Results - Stock News Analyzer{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Sentiment Analysis Validation Results</h1>
+    
+    {% if error %}
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">Error</h4>
+        <p>{{ error }}</p>
+    </div>
+    {% else %}
+    
+    <!-- Statistics Cards -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 mb-4 justify-content-center">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Articles</h5>
+                    <h2 class="display-4">{{ total_articles }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">DeepSeek Matches</h5>
+                    <h2 class="display-4">{{ sentiment_matches }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Gemini Matches</h5>
+                    <h2 class="display-4">{{ gemini_matches }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Llama4 Matches</h5>
+                    <h2 class="display-4">{{ llama4_matches }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">GPT-4 Mini Matches</h5>
+                    <h2 class="display-4">{{ gpt4_mini_matches }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Match Percentages -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 mb-4 justify-content-center">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">DeepSeek Match %</h5>
+                    <h2 class="display-4">{{ deepseek_match_percentage }}%</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Gemini Match %</h5>
+                    <h2 class="display-4">{{ gemini_match_percentage }}%</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Llama4 Match %</h5>
+                    <h2 class="display-4">{{ llama4_match_percentage }}%</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">GPT-4 Mini Match %</h5>
+                    <h2 class="display-4">{{ gpt4_mini_match_percentage }}%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sentiment Distribution Chart -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Sentiment Distribution</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <canvas id="sentimentChart"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Sentiment</th>
+                                <th>Count</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sentiment, count in sentiment_counts.items %}
+                            <tr>
+                                <td>
+                                    <span class="badge {% if sentiment in 'VP,P,SP' %}bg-success{% elif sentiment == 'N' %}bg-warning{% else %}bg-danger{% endif %}">
+                                        {{ sentiment }}
+                                    </span>
+                                </td>
+                                <td>{{ count }}</td>
+                                <td>{{ count|divide:total_articles|multiply:100|floatformat:1 }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Validation Results Table -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Validation Results</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Symbols</th>
+                            <th>EODHD</th>
+                            <th>DeepSeek</th>
+                            <th>Gemini</th>
+                            <th>Llama4</th>
+                            <th>GPT-4 Mini</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in validation_data %}
+                        <tr>
+                            <td>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#articleModal{{ forloop.counter }}">
+                                    {{ item.title|truncatechars:50 }}
+                                </a>
+                            </td>
+                            <td>
+                                {% for symbol in item.symbols %}
+                                <span class="badge bg-primary">{{ symbol }}</span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <span class="badge {% if item.eodhd_sentiment in 'VP,P,SP' %}bg-success{% elif item.eodhd_sentiment == 'N' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ item.eodhd_sentiment }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge {% if item.deepseek_sentiment.sentiment in 'VP,P,SP' %}bg-success{% elif item.deepseek_sentiment.sentiment == 'N' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ item.deepseek_sentiment.sentiment }}
+                                    {% if item.deepseek_sentiment.match %}
+                                    <i class="fas fa-check-circle text-white"></i>
+                                    {% else %}
+                                    <i class="fas fa-times-circle text-white"></i>
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge {% if item.gemini_sentiment.sentiment in 'VP,P,SP' %}bg-success{% elif item.gemini_sentiment.sentiment == 'N' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ item.gemini_sentiment.sentiment }}
+                                    {% if item.gemini_sentiment.match %}
+                                    <i class="fas fa-check-circle text-white"></i>
+                                    {% else %}
+                                    <i class="fas fa-times-circle text-white"></i>
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge {% if item.llama4_sentiment.sentiment in 'VP,P,SP' %}bg-success{% elif item.llama4_sentiment.sentiment == 'N' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ item.llama4_sentiment.sentiment }}
+                                    {% if item.llama4_sentiment.match %}
+                                    <i class="fas fa-check-circle text-white"></i>
+                                    {% else %}
+                                    <i class="fas fa-times-circle text-white"></i>
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge {% if item.gpt4_mini_sentiment.sentiment in 'VP,P,SP' %}bg-success{% elif item.gpt4_mini_sentiment.sentiment == 'N' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ item.gpt4_mini_sentiment.sentiment }}
+                                    {% if item.gpt4_mini_sentiment.match %}
+                                    <i class="fas fa-check-circle text-white"></i>
+                                    {% else %}
+                                    <i class="fas fa-times-circle text-white"></i>
+                                    {% endif %}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            {% if validation_data.has_other_pages %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if validation_data.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ validation_data.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for i in validation_data.paginator.page_range %}
+                        {% if validation_data.number == i %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if validation_data.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ validation_data.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Now render all modals after the table -->
+    {% for item in validation_data %}
+    <div class="modal fade" id="articleModal{{ forloop.counter }}" tabindex="-1" aria-labelledby="articleModalLabel{{ forloop.counter }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="articleModalLabel{{ forloop.counter }}">{{ item.title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6>EODHD Sentiment</h6>
+                            <p>
+                                <span class="badge {% if item.eodhd_sentiment in 'VP,P,SP' %}bg-success{% elif item.eodhd_sentiment == 'N' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ item.eodhd_sentiment }}
+                                </span>
+                            </p>
+                            <h6>Sentiment Data</h6>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Positive
+                                    <span class="badge bg-primary rounded-pill">{{ item.eodhd_sentiment_data.pos|floatformat:3 }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Neutral
+                                    <span class="badge bg-primary rounded-pill">{{ item.eodhd_sentiment_data.neu|floatformat:3 }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Negative
+                                    <span class="badge bg-primary rounded-pill">{{ item.eodhd_sentiment_data.neg|floatformat:3 }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Polarity
+                                    <span class="badge bg-primary rounded-pill">{{ item.eodhd_sentiment_data.polarity|floatformat:3 }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Model Comparison</h6>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Model</th>
+                                        <th>Sentiment</th>
+                                        <th>Match</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>DeepSeek</td>
+                                        <td>
+                                            <span class="badge {% if item.deepseek_sentiment.sentiment in 'VP,P,SP' %}bg-success{% elif item.deepseek_sentiment.sentiment == 'N' %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {{ item.deepseek_sentiment.sentiment }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if item.deepseek_sentiment.match %}
+                                            <span class="badge bg-success">Match</span>
+                                            {% else %}
+                                            <span class="badge bg-danger">Mismatch</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gemini</td>
+                                        <td>
+                                            <span class="badge {% if item.gemini_sentiment.sentiment in 'VP,P,SP' %}bg-success{% elif item.gemini_sentiment.sentiment == 'N' %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {{ item.gemini_sentiment.sentiment }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if item.gemini_sentiment.match %}
+                                            <span class="badge bg-success">Match</span>
+                                            {% else %}
+                                            <span class="badge bg-danger">Mismatch</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Llama4</td>
+                                        <td>
+                                            <span class="badge {% if item.llama4_sentiment.sentiment in 'VP,P,SP' %}bg-success{% elif item.llama4_sentiment.sentiment == 'N' %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {{ item.llama4_sentiment.sentiment }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if item.llama4_sentiment.match %}
+                                            <span class="badge bg-success">Match</span>
+                                            {% else %}
+                                            <span class="badge bg-danger">Mismatch</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>GPT-4 Mini</td>
+                                        <td>
+                                            <span class="badge {% if item.gpt4_mini_sentiment.sentiment in 'VP,P,SP' %}bg-success{% elif item.gpt4_mini_sentiment.sentiment == 'N' %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {{ item.gpt4_mini_sentiment.sentiment }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if item.gpt4_mini_sentiment.match %}
+                                            <span class="badge bg-success">Match</span>
+                                            {% else %}
+                                            <span class="badge bg-danger">Mismatch</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- DeepSeek Details -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">DeepSeek Analysis</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Importance</h6>
+                                    <p>
+                                        <span class="badge {% if item.deepseek_sentiment.importance == 'CRITICAL' %}bg-danger{% elif item.deepseek_sentiment.importance == 'IMPORTANT' %}bg-warning{% else %}bg-info{% endif %}">
+                                            {{ item.deepseek_sentiment.importance }}
+                                        </span>
+                                    </p>
+                                    <h6>Company</h6>
+                                    <p>{{ item.deepseek_sentiment.company_name }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Description</h6>
+                                    <p>{{ item.deepseek_sentiment.description }}</p>
+                                </div>
+                            </div>
+                            <h6>Reasons</h6>
+                            <ul class="list-group">
+                                {% for reason in item.deepseek_sentiment.reasons %}
+                                <li class="list-group-item">{{ reason }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Gemini Details -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">Gemini Analysis</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Importance</h6>
+                                    <p>
+                                        <span class="badge {% if item.gemini_sentiment.importance == 'CRITICAL' %}bg-danger{% elif item.gemini_sentiment.importance == 'IMPORTANT' %}bg-warning{% else %}bg-info{% endif %}">
+                                            {{ item.gemini_sentiment.importance }}
+                                        </span>
+                                    </p>
+                                    <h6>Company</h6>
+                                    <p>{{ item.gemini_sentiment.company_name }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Description</h6>
+                                    <p>{{ item.gemini_sentiment.description }}</p>
+                                </div>
+                            </div>
+                            <h6>Reasons</h6>
+                            <ul class="list-group">
+                                {% for reason in item.gemini_sentiment.reasons %}
+                                <li class="list-group-item">{{ reason }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Llama4 Details -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">Llama4 Analysis</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Importance</h6>
+                                    <p>
+                                        <span class="badge {% if item.llama4_sentiment.importance == 'CRITICAL' %}bg-danger{% elif item.llama4_sentiment.importance == 'IMPORTANT' %}bg-warning{% else %}bg-info{% endif %}">
+                                            {{ item.llama4_sentiment.importance }}
+                                        </span>
+                                    </p>
+                                    <h6>Company</h6>
+                                    <p>{{ item.llama4_sentiment.company_name }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Description</h6>
+                                    <p>{{ item.llama4_sentiment.description }}</p>
+                                </div>
+                            </div>
+                            <h6>Reasons</h6>
+                            <ul class="list-group">
+                                {% for reason in item.llama4_sentiment.reasons %}
+                                <li class="list-group-item">{{ reason }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- GPT-4 Mini Details -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">GPT-4 Mini Analysis</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Importance</h6>
+                                    <p>
+                                        <span class="badge {% if item.gpt4_mini_sentiment.importance == 'CRITICAL' %}bg-danger{% elif item.gpt4_mini_sentiment.importance == 'IMPORTANT' %}bg-warning{% else %}bg-info{% endif %}">
+                                            {{ item.gpt4_mini_sentiment.importance }}
+                                        </span>
+                                    </p>
+                                    <h6>Company</h6>
+                                    <p>{{ item.gpt4_mini_sentiment.company_name }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Description</h6>
+                                    <p>{{ item.gpt4_mini_sentiment.description }}</p>
+                                </div>
+                            </div>
+                            <h6>Reasons</h6>
+                            <ul class="list-group">
+                                {% for reason in item.gpt4_mini_sentiment.reasons %}
+                                <li class="list-group-item">{{ reason }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sentiment Distribution Chart
+        const ctx = document.getElementById('sentimentChart').getContext('2d');
+        const sentimentData = {
+            labels: [
+                {% for sentiment, count in sentiment_counts.items %}
+                '{{ sentiment }}',
+                {% endfor %}
+            ],
+            datasets: [{
+                label: 'Sentiment Distribution',
+                data: [
+                    {% for sentiment, count in sentiment_counts.items %}
+                    {{ count }},
+                    {% endfor %}
+                ],
+                backgroundColor: [
+                    '#28a745', // VP - Green
+                    '#28a745', // P - Green
+                    '#28a745', // SP - Green
+                    '#ffc107', // N - Yellow
+                    '#dc3545', // SN - Red
+                    '#dc3545', // NG - Red
+                    '#dc3545'  // VN - Red
+                ],
+                borderWidth: 1
+            }]
+        };
+        
+        new Chart(ctx, {
+            type: 'pie',
+            data: sentimentData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Sentiment Distribution'
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %} 

@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+
+{% block title %}Articles - Stock News Analyzer{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h1 class="card-title">Analyzed News Articles</h1>
+                <p class="card-text">Browse and filter analyzed news articles with sentiment analysis.</p>
+            </div>
+        </div>
+        
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h4 class="mb-3">Filters</h4>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label for="sentimentFilter" class="form-label">Sentiment</label>
+                    <select id="sentimentFilter" class="form-select">
+                        <option value="">All Sentiments</option>
+                        <option value="VP">Very Positive</option>
+                        <option value="P">Positive</option>
+                        <option value="SP">Slightly Positive</option>
+                        <option value="N">Neutral</option>
+                        <option value="SN">Slightly Negative</option>
+                        <option value="NG">Negative</option>
+                        <option value="VN">Very Negative</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="importanceFilter" class="form-label">Importance</label>
+                    <select id="importanceFilter" class="form-select">
+                        <option value="">All Importance Levels</option>
+                        <option value="CRITICAL">Critical</option>
+                        <option value="IMPORTANT">Important</option>
+                        <option value="REGULAR">Regular</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="symbolFilter" class="form-label">Stock Symbol</label>
+                    <input type="text" id="symbolFilter" class="form-control" placeholder="e.g., NASDAQ:AAPL">
+                </div>
+                <div class="col-md-3 mb-3 d-flex align-items-end">
+                    <button id="applyFilters" class="btn btn-primary w-100">
+                        <i class="fas fa-filter me-2"></i>Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="loading-spinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Loading articles...</p>
+        </div>
+        
+        <!-- Articles Container -->
+        <div id="articlesContainer"></div>
+        
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul id="pagination" class="pagination justify-content-center"></ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        let currentPage = 1;
+        let totalPages = 1;
+        
+        // Function to get sentiment class
+        function getSentimentClass(sentiment) {
+            if (sentiment.startsWith('P') || sentiment === 'VP') {
+                return 'sentiment-positive';
+            } else if (sentiment.startsWith('N') || sentiment === 'NG' || sentiment === 'VN') {
+                return 'sentiment-negative';
+            } else {
+                return 'sentiment-neutral';
+            }
+        }
+        
+        // Function to get importance class
+        function getImportanceClass(importance) {
+            return 'importance-' + importance.toLowerCase();
+        }
+        
+        // Function to format sentiment text
+        function formatSentiment(sentiment) {
+            const sentimentMap = {
+                'VP': 'Very Positive',
+                'P': 'Positive',
+                'SP': 'Slightly Positive',
+                'N': 'Neutral',
+                'SN': 'Slightly Negative',
+                'NG': 'Negative',
+                'VN': 'Very Negative'
+            };
+            return sentimentMap[sentiment] || sentiment;
+        }
+        
+        // Function to load articles
+        function loadArticles(page = 1) {
+            // Show loading spinner
+            $('#loadingSpinner').show();
+            $('#articlesContainer').hide();
+            
+            // Get filter values
+            const sentiment = $('#sentimentFilter').val();
+            const importance = $('#importanceFilter').val();
+            const symbol = $('#symbolFilter').val();
+            
+            // Build URL with query parameters
+            let url = "{% url 'news_analyzer:get_articles' %}?page=" + page;
+            if (sentiment) url += "&sentiment=" + sentiment;
+            if (importance) url += "&importance=" + importance;
+            if (symbol) url += "&symbol=" + symbol;
+            
+            // Call the API
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response) {
+                    // Hide loading spinner
+                    $('#loadingSpinner').hide();
+                    $('#articlesContainer').show();
+                    
+                    // Update pagination info
+                    currentPage = parseInt(response.current_page);
+                    totalPages = parseInt(response.total_pages);
+                    
+                    // Clear articles container
+                    $('#articlesContainer').empty();
+                    
+                    // Check if there are articles
+                    if (response.articles.length === 0) {
+                        $('#articlesContainer').html('<div class="alert alert-info">No articles found matching your criteria.</div>');
+                    } else {
+                        // Add articles to container
+                        response.articles.forEach(function(article) {
+                            const sentimentClass = getSentimentClass(article.sentiment);
+                            const importanceClass = getImportanceClass(article.importance);
+                            
+                            let articleHtml = `
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">${article.title}</h5>
+                                        <div>
+                                            <span class="badge ${sentimentClass} me-2">${formatSentiment(article.sentiment)}</span>
+                                            <span class="badge ${importanceClass}">${article.importance}</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <strong>Company:</strong> ${article.company_name}<br>
+                                            <strong>Symbols:</strong> ${article.symbols.join(', ')}
+                                        </div>
+                                        <p class="card-text">${article.description}</p>
+                                        
+                                        <div class="mt-3">
+                                            <h6>Reasons:</h6>
+                                            <ul>`;
+                                            
+                            article.reasons.forEach(function(reason) {
+                                articleHtml += `<li>${reason}</li>`;
+                            });
+                            
+                            articleHtml += `
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="mt-3 text-muted">
+                                            <small>Analyzer: ${article.analyzer} | Created: ${article.created_at}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            $('#articlesContainer').append(articleHtml);
+                        });
+                    }
+                    
+                    // Update pagination
+                    updatePagination();
+                },
+                error: function(xhr) {
+                    // Hide loading spinner
+                    $('#loadingSpinner').hide();
+                    $('#articlesContainer').show();
+                    
+                    // Show error message
+                    let errorMessage = 'An error occurred while loading articles.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    
+                    $('#articlesContainer').html(`
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>${errorMessage}
+                        </div>
+                    `);
+                }
+            });
+        }
+        
+        // Function to update pagination
+        function updatePagination() {
+            const pagination = $('#pagination');
+            pagination.empty();
+            
+            // Don't show pagination if there's only one page
+            if (totalPages <= 1) {
+                return;
+            }
+            
+            // Previous button
+            pagination.append(`
+                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
+                </li>
+            `);
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                // Show first page, last page, current page, and pages around current page
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    pagination.append(`
+                        <li class="page-item ${i === currentPage ? 'active' : ''}">
+                            <a class="page-link" href="#" data-page="${i}">${i}</a>
+                        </li>
+                    `);
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    // Show ellipsis
+                    pagination.append(`
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    `);
+                }
+            }
+            
+            // Next button
+            pagination.append(`
+                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
+                </li>
+            `);
+        }
+        
+        // Event handler for pagination clicks
+        $('#pagination').on('click', '.page-link', function(e) {
+            e.preventDefault();
+            const page = $(this).data('page');
+            if (page && page !== currentPage) {
+                loadArticles(page);
+            }
+        });
+        
+        // Event handler for filter button
+        $('#applyFilters').click(function() {
+            loadArticles(1); // Reset to first page when applying filters
+        });
+        
+        // Load articles on page load
+        loadArticles();
+    });
+</script>
+{% endblock %} 

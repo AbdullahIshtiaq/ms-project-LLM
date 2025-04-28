@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Stock News Analyzer{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <h1 class="display-4 mb-4">Stock News Analyzer</h1>
+                <p class="lead mb-5">Analyze financial news to get insights for your investment decisions.</p>
+                
+                <div class="row mb-5">
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="fas fa-newspaper fa-3x mb-3 text-primary"></i>
+                                <h3>News Scraping</h3>
+                                <p>Automatically collect news from multiple financial sources.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="fas fa-brain fa-3x mb-3 text-primary"></i>
+                                <h3>AI Analysis</h3>
+                                <p>Advanced AI algorithms analyze sentiment and importance.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="fas fa-chart-bar fa-3x mb-3 text-primary"></i>
+                                <h3>Investment Insights</h3>
+                                <p>Get actionable insights for your investment strategy.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="mb-4">Start Analysis</h3>
+                                <p class="mb-4">Click the button below to start scraping and analyzing news articles.</p>
+                                <button id="scrapeButton" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-sync-alt me-2"></i>Scrape and Analyze News
+                                </button>
+                                
+                                <div id="loadingSpinner" class="loading-spinner mt-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-3">Analyzing news articles... This may take a few minutes.</p>
+                                </div>
+                                
+                                <div id="resultMessage" class="alert mt-4" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        $('#scrapeButton').click(function() {
+            // Show loading spinner
+            $('#loadingSpinner').show();
+            $('#scrapeButton').prop('disabled', true);
+            $('#resultMessage').hide();
+            
+            // Call the API
+            $.ajax({
+                url: "{% url 'news_analyzer:scrape_news' %}",
+                type: 'GET',
+                success: function(response) {
+                    // Hide loading spinner
+                    $('#loadingSpinner').hide();
+                    $('#scrapeButton').prop('disabled', false);
+                    
+                    // Show success message
+                    $('#resultMessage')
+                        .removeClass('alert-danger')
+                        .addClass('alert-success')
+                        .html('<i class="fas fa-check-circle me-2"></i>' + response.message)
+                        .show();
+                },
+                error: function(xhr) {
+                    // Hide loading spinner
+                    $('#loadingSpinner').hide();
+                    $('#scrapeButton').prop('disabled', false);
+                    
+                    // Show error message
+                    let errorMessage = 'An error occurred. Please try again.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    
+                    $('#resultMessage')
+                        .removeClass('alert-success')
+                        .addClass('alert-danger')
+                        .html('<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage)
+                        .show();
+                }
+            });
+        });
+    });
+</script>
+{% endblock %} 

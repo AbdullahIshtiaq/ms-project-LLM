@@ -4,5 +4,9 @@ from . import views
 app_name = 'news_analyzer'
 
 urlpatterns = [
-    path('scrape/', views.scrape_news_view, name='scrape_news'),
+    path('scrape_and_analyze/', views.scrape_and_analyze, name='scrape_news'),
+    path('', views.home, name='home'),
+    path('articles/', views.articles, name='articles'),
+    path('get_articles/', views.get_articles, name='get_articles'),
+    path('validation/', views.validation_results, name='validation_results'),
 ] 
