@@ -111,7 +111,7 @@ def generate_json():
     return {"results": results}
 
 def get_code_new(name_input, index=False, exact_only=False):
-    list_by_exchange_data = generate_json()
+    list_by_exchange_data = cached_generate_json()
 
     # Create a dictionary to map normalized names to original names
     name_map = {clean_stock_name(alt_name): alt_name 

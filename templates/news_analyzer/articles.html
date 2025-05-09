@@ -42,9 +42,12 @@
                     <label for="symbolFilter" class="form-label">Stock Symbol</label>
                     <input type="text" id="symbolFilter" class="form-control" placeholder="e.g., NASDAQ:AAPL">
                 </div>
-                <div class="col-md-3 mb-3 d-flex align-items-end">
-                    <button id="applyFilters" class="btn btn-primary w-100">
+                <div class="col-md-3 mb-3 d-flex align-items-end gap-2">
+                    <button id="applyFilters" class="btn btn-primary flex-grow-1">
                         <i class="fas fa-filter me-2"></i>Apply Filters
+                    </button>
+                    <button id="generatePdf" class="btn btn-success">
+                        <i class="fas fa-file-pdf me-2"></i>Generate PDF
                     </button>
                 </div>
             </div>
@@ -103,6 +106,31 @@
                 'VN': 'Very Negative'
             };
             return sentimentMap[sentiment] || sentiment;
+        }
+
+        // Function to generate PDF
+        function generatePdf() {
+            // Show loading spinner
+            $('#loadingSpinner').show();
+            
+            // Get filter values
+            const sentiment = $('#sentimentFilter').val();
+            const importance = $('#importanceFilter').val();
+            const symbol = $('#symbolFilter').val();
+            
+            // Build URL with query parameters
+            let url = "{% url 'news_analyzer:generate_pdf' %}";
+            if (sentiment) url += "?sentiment=" + sentiment;
+            if (importance) url += (sentiment ? "&" : "?") + "importance=" + importance;
+            if (symbol) url += (sentiment || importance ? "&" : "?") + "symbol=" + symbol;
+            
+            // Navigate to the URL directly
+            window.location.href = url;
+            
+            // Hide loading spinner after a short delay
+            setTimeout(() => {
+                $('#loadingSpinner').hide();
+            }, 1000);
         }
         
         // Function to load articles
@@ -253,8 +281,17 @@
             `);
         }
         
-        // Event handler for pagination clicks
-        $('#pagination').on('click', '.page-link', function(e) {
+        // Event Listeners
+        $('#applyFilters').click(function() {
+            loadArticles(1);
+        });
+        
+        $('#generatePdf').click(function() {
+            generatePdf();
+        });
+        
+        // Pagination click handler
+        $(document).on('click', '.page-link', function(e) {
             e.preventDefault();
             const page = $(this).data('page');
             if (page && page !== currentPage) {
@@ -262,12 +299,7 @@
             }
         });
         
-        // Event handler for filter button
-        $('#applyFilters').click(function() {
-            loadArticles(1); // Reset to first page when applying filters
-        });
-        
-        // Load articles on page load
+        // Initial load
         loadArticles();
     });
 </script>

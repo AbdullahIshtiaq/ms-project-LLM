@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .scraper import scrape_lse_news, scrape_yahoo_finance_news, create_stock_news_async
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import traceback
 from .article_processor import create_stock_news
 from rest_framework.decorators import api_view
@@ -11,6 +11,8 @@ import asyncio
 import concurrent.futures
 from asgiref.sync import sync_to_async, async_to_sync
 import os
+from datetime import datetime
+from playwright.sync_api import sync_playwright
 
 @api_view(['GET'])
 def scrape_and_analyze(request):
@@ -181,5 +183,92 @@ def validation_results(request):
         print(f"Error loading validation results: {str(e)}")
         traceback.print_exc()
         return render(request, 'news_analyzer/validation_results.html', {'error': str(e)})
+
+def generate_pdf(request):
+    """
+    Generate a PDF report of the analyzed news articles.
+    """
+    try:
+        # Get query parameters for filtering
+        sentiment = request.GET.get('sentiment', None)
+        importance = request.GET.get('importance', None)
+        symbol = request.GET.get('symbol', None)
+        
+        # Base query
+        query = NewsSentiment.objects.all().order_by('-created_at')
+        
+        # Apply filters if provided
+        if sentiment:
+            query = query.filter(sentiment=sentiment)
+        if importance:
+            query = query.filter(importance=importance)
+        if symbol:
+            query = query.filter(stock_symbol__symbol=symbol)
+        
+        # Format the articles data
+        articles = []
+        for item in query:
+            # Get the reasons as a list
+            reasons = []
+            if item.reason:
+                try:
+                    reasons = json.loads(item.reason)
+                except:
+                    reasons = [item.reason]
+            
+            # Get the stock symbols
+            symbols = []
+            for stock in item.stock_symbol.all():
+                symbols.append(stock.symbol)
+            
+            article_data = {
+                "title": item.article.title,
+                "symbols": symbols,
+                "sentiment": item.sentiment,
+                "importance": item.importance.lower(),
+                "company_name": item.stock_name,
+                "description": item.summary,
+                "reasons": reasons,
+                "analyzer": "deepseek",
+                "created_at": item.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            }
+            articles.append(article_data)
+        
+        # Prepare context for the template
+        context = {
+            'articles': articles,
+            'generation_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+        
+        # Render the PDF template
+        html_content = render(request, 'news_analyzer/pdf_template.html', context).content.decode('utf-8')
+        
+        # Generate PDF using Playwright
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            page = browser.new_page()
+            
+            # Set content and wait for it to load
+            page.set_content(html_content)
+            page.wait_for_load_state('networkidle')
+            
+            # Generate PDF
+            pdf = page.pdf(
+                format='A4',
+                margin={'top': '20mm', 'right': '20mm', 'bottom': '20mm', 'left': '20mm'},
+                print_background=True
+            )
+            
+            browser.close()
+        
+        # Create the HTTP response with the PDF
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="stock_news_report.pdf"'
+        
+        return response
+        
+    except Exception as e:
+        traceback.print_exc()
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 

@@ -6,7 +6,7 @@ from .stock_data import StockData
 from .llm_client import OpenRouterClient
 
 # # Initialize OpenRouterClient
-client = OpenRouterClient(api_key="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")
+client = OpenRouterClient(api_key="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")
 
 
 from .models import NewsArticle, StockCompany, NewsSentiment
@@ -81,6 +81,9 @@ Article Title:
 
 Article:
 {article_text}
+
+Stock Price History:
+{stock_history_context}
         """
         try:
             # Use LangChain for local inference
@@ -88,7 +91,7 @@ Article:
                 # result = ollama_llm.invoke(prompt)
                 result = client.chat_completion(
                         messages=[{"role": "user", "content": prompt}],
-                        model_name="deepseek",
+                        model_name="gemini",
                         # temperature=0.7
                     )
                 print("analyze_sentiment Result: ", result)
@@ -219,9 +222,9 @@ def create_stock_news(article_text, article_url, title, date_posted):
     If no LSE stock or index mentions are detected, return an empty list for "mentions".
 
     IMPORTANT: Return an empty list for "mentions" if the article is not latest news, such as:
-    - Monthly/yearly summaries (e.g., "أهم الأحداث", "أبرز الأخبار")
-    - Historical reviews (e.g., "خلال عام", "خلال الشهر", "منذ بداية العام")
-    - Look-back articles (e.g., "في الفترة الماضية", "خلال الفترة")
+    - Monthly/yearly summaries 
+    - Historical reviews 
+    - Look-back articles
     
     IMPORTANT: The key in your response MUST be "mentions" (plural), not "mention" (singular).
     """
@@ -231,7 +234,7 @@ def create_stock_news(article_text, article_url, title, date_posted):
         # result = ollama_llm.invoke(prompt)
         result = client.chat_completion(
             messages=[{"role": "user", "content": prompt}],
-            model_name="deepseek",
+            model_name="gemini",
             # temperature=0.7
         )
         print("CREATE STOCK NEWS Result: ", result)

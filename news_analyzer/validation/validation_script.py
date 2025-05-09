@@ -12,7 +12,7 @@ from news_analyzer.llm_client import OpenRouterClient
 
 
 # # Initialize OpenRouterClient
-client = OpenRouterClient(api_key="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")
+client = OpenRouterClient(api_key="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")
 # Initialize StockData
 stock_data = StockData()
 
